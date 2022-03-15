@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import run.bequick.dreamccc.pats.common.DrResponse;
-import run.bequick.dreamccc.pats.repository.UserRepository;
+import run.bequick.dreamccc.pats.domain.AppUser;
+import run.bequick.dreamccc.pats.repository.AppUserRepository;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -14,26 +14,26 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
 
     @GetMapping("/{id}")
-    public DrResponse<User> getUserById(@PathVariable Long id){
+    public DrResponse<AppUser> getUserById(@PathVariable Long id){
 
-        User user = userRepository.findById(id).orElse(null);
-        return DrResponse.data(user);
+        AppUser appUser = appUserRepository.findById(id).orElse(null);
+        return DrResponse.data(appUser);
     }
 
     @PostMapping("/{id}")
-    public DrResponse<User> editUser(@PathVariable Long id,@RequestBody User editUser){
+    public DrResponse<AppUser> editUser(@PathVariable Long id, @RequestBody AppUser editAppUser){
 
-        Optional<User> optionalUser = userRepository.findById(id);
-        optionalUser.ifPresent(user -> {
-            editUser.setId(null);
-            BeanUtils.copyProperties(editUser,user);
-            userRepository.save(user);
+        Optional<AppUser> optionalUser = appUserRepository.findById(id);
+        optionalUser.ifPresent(appUser -> {
+            editAppUser.setId(null);
+            BeanUtils.copyProperties(editAppUser, appUser);
+            appUserRepository.save(appUser);
         });
 
-        return DrResponse.data(userRepository.findById(id).orElse(null));
+        return DrResponse.data(appUserRepository.findById(id).orElse(null));
     }
 
 }
