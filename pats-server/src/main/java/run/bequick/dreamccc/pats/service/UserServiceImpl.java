@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import run.bequick.dreamccc.pats.domain.AppRole;
 import run.bequick.dreamccc.pats.domain.AppUser;
@@ -29,10 +30,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final AppUserRepository appUserRepository;
     private final AppRoleRepository appRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public AppUser saveUser(AppUser user) {
         log.info("saveUser: {}", user.getName());
+        String encodePwd = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodePwd);
         return appUserRepository.save(user);
     }
 

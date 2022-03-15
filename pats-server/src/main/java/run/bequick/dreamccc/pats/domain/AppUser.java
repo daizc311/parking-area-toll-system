@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 @Data
+@Table(name = "app_user", uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

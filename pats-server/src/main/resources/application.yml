@@ -5,6 +5,11 @@ spring:
     url: jdbc:mysql://cn.dreamccc.cn:3306/pats?serverTimezone=GMT%2B8&useSSL=false
     username: root
     password: dzc9669
+    hikari:
+      keepalive-time: 10
+      idle-timeout: 10
+      max-lifetime: 10
+      connection-timeout: 1000
   jpa:
     database: mysql
     generate-ddl: true
