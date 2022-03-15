@@ -12,4 +12,6 @@ spring:
     hibernate:
       ddl-auto: create-drop
     properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+      hibernate.format_sql: true
 debug: true

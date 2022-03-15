@@ -16,5 +16,7 @@ public interface UserService {
 
     AppRole saveRole(AppRole role);
 
-    void addRoleToUser(String username, String roleName);
+    void linkRole2User(Long roleId, Long userId);
+
+    void linkRole2UserWithName(String roleName, String username);
 }

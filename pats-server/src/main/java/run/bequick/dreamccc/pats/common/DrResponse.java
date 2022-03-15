@@ -1,7 +1,7 @@
 package run.bequick.dreamccc.pats.common;
 
 import lombok.Data;
-import lombok.var;
+
 
 @Data
 public class DrResponse<DATA> {
