@@ -40,7 +40,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         // 成功认证刷新Token
-        log.info("刷新Token");
+        log.info("签发Token");
         User userDetail = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("HMAC256");
         String accessToken = JWT.create()
