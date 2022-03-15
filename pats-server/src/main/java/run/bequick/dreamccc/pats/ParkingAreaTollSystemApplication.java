@@ -13,6 +13,7 @@ import run.bequick.dreamccc.pats.service.UserService;
 import java.util.ArrayList;
 import java.util.Date;
 
+// https://www.youtube.com/watch?v=VVn9OG9nfH0
 @SpringBootApplication
 public class ParkingAreaTollSystemApplication {
 
