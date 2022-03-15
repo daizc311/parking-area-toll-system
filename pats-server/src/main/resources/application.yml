@@ -1,0 +1,15 @@
+server:
+  port: 8888
+spring:
+  datasource:
+    url: jdbc:mysql://cn.dreamccc.cn:3306/pats?serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: dzc9669
+  jpa:
+    database: mysql
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+debug: true
