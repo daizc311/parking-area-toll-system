@@ -8,4 +8,6 @@ import run.bequick.dreamccc.pats.domain.AppUser;
 public interface AppUserRepository extends JpaRepository<AppUser,Long> {
 
     AppUser findByUsername(String username);
+
+
 }

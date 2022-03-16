@@ -36,18 +36,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        var authenticationFilter = new JwtAuthenticationFilter(authenticationManager());
+        authenticationFilter.setFilterProcessesUrl("/api/login");
+
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .formLogin()
-//                .usernameParameter("username")
-//                .passwordParameter("password")
-//                .loginPage("/login")
-//                .and()
-                .authorizeRequests().anyRequest().permitAll()
-//        .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated();
+                .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
                 .and()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()));
+                .addFilter(authenticationFilter);
     }
 
     @Override
