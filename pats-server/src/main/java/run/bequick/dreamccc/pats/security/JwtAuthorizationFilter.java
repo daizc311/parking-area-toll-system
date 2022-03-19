@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -29,39 +29,48 @@ import java.util.stream.Stream;
 import static run.bequick.dreamccc.pats.security.SecurityConstant.*;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final ObjectMapper objectMapper;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals(LOGIN_PATH)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (Strings.isNotBlank(authHeader) && authHeader.startsWith(BEARER)) {
-            try {
-                String jwtTokenStr = authHeader.substring(BEARER.length());
-                Algorithm algorithm = Algorithm.HMAC256(SECRET);
-                JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-                DecodedJWT jwt = jwtVerifier.verify(jwtTokenStr);
-                String username = jwt.getSubject();
-                String[] roles = jwt.getClaim("roles").asArray(String.class);
-                var grantedAuthorityList = Stream.of(roles)
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-                var authenticationToken = new UsernamePasswordAuthenticationToken(username, null, grantedAuthorityList);
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        try {
+            String jwtTokenStr = null;
+            if (request.getServletPath().equals(LOGIN_PATH)) {
                 filterChain.doFilter(request, response);
-            } catch (JWTVerificationException e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                objectMapper.writeValue(response.getOutputStream(),DrResponse.failed("登录失效，请重新登录"));
-                log.info(StrFormatter.format("Token验证失败:{}", e.getMessage()));
+                return;
             }
-        }
+            final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (Strings.isNotBlank(authHeader) && authHeader.startsWith(BEARER)) {
+                jwtTokenStr = authHeader.substring(BEARER.length());
+            }
+            final String authParameter = request.getParameter("token");
+            if (Strings.isNotBlank(authParameter)) {
+                jwtTokenStr = authParameter;
+            }
 
+            if (Strings.isBlank(jwtTokenStr)) {
+                throw new JWTVerificationException("未携带token");
+            }
+
+            Algorithm algorithm = Algorithm.HMAC256(SECRET);
+            JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+            DecodedJWT jwt = jwtVerifier.verify(jwtTokenStr);
+            String username = jwt.getSubject();
+            String[] roles = jwt.getClaim("roles").asArray(String.class);
+            String userId = jwt.getClaim("userId").asString();
+            var grantedAuthorityList = Stream.of(roles)
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+            var authenticationToken = new JwtUsernamePasswordAuthenticationToken(userId, username, null, grantedAuthorityList);
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            filterChain.doFilter(request, response);
+        } catch (JWTVerificationException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            objectMapper.writeValue(response.getOutputStream(), DrResponse.failed(e.getMessage()));
+            log.info(StrFormatter.format("Token验证失败:{}", e.getMessage()));
+        }
     }
 }

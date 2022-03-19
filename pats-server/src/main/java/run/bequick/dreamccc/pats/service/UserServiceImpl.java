@@ -16,6 +16,7 @@ import run.bequick.dreamccc.pats.domain.AppRole;
 import run.bequick.dreamccc.pats.domain.AppUser;
 import run.bequick.dreamccc.pats.repository.AppRoleRepository;
 import run.bequick.dreamccc.pats.repository.AppUserRepository;
+import run.bequick.dreamccc.pats.security.JwtUserDetail;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -92,6 +93,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
-        return new User(username, appUser.getPassword(), authorities);
+        return new JwtUserDetail(appUser.getId(), username, appUser.getPassword(), authorities);
     }
 }

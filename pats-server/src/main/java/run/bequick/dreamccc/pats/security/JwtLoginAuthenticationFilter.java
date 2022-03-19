@@ -10,13 +10,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import run.bequick.dreamccc.pats.common.DrResponse;
 
@@ -33,7 +31,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final ObjectMapper objectMapper;
@@ -45,7 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String password = request.getParameter("password");
         log.info("用户[{}]尝试登录", username);
 
-        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        return authenticationManager.authenticate(new JwtUsernamePasswordAuthenticationToken(username, password));
     }
 
     @Override
@@ -55,6 +53,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("用户[{}]登录失败，cause:{}", username, failed.getMessage());
         DrResponse<Object> drResponse = DrResponse.failed();
         drResponse.setMessage(failed.getMessage());
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         objectMapper.writeValue(response.getOutputStream(), drResponse);
     }
 
@@ -71,18 +72,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // 成功认证刷新Token
         log.info("签发Token");
-        User userDetail = (User) authentication.getPrincipal();
+        JwtUserDetail userDetail = (JwtUserDetail) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("HMAC256");
         String accessToken = JWT.create()
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(accessTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
+                .withClaim("userId",userDetail.getUserId())
                 .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
         String refreshToken = JWT.create()
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(refreshTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
+                .withClaim("userId",userDetail.getUserId())
                 .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
@@ -93,10 +96,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         TokenResponse tokenResponse = new TokenResponse();
         tokenResponse.setAccessToken(accessToken);
         tokenResponse.setRefreshToken(refreshToken);
-        tokenResponse.setAccountId(userDetail.getUsername());
+        tokenResponse.setAccountId(userDetail.getUserId() + "");
         tokenResponse.setCreatedAt(dateTime);
         tokenResponse.setExpiresIn(expiresSecond);
         tokenResponse.setTokenType("bearer");
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         objectMapper.writeValue(response.getOutputStream(), tokenResponse);
     }
 
