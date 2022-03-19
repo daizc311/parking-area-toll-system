@@ -18,6 +18,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import run.bequick.dreamccc.pats.common.DrResponse;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,7 +36,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-    private final ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json().build();
+    private final ObjectMapper objectMapper;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -48,15 +49,25 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+
+        String username = request.getParameter("username");
+        log.info("用户[{}]登录失败，cause:{}", username, failed.getMessage());
+        DrResponse<Object> drResponse = DrResponse.failed();
+        drResponse.setMessage(failed.getMessage());
+        objectMapper.writeValue(response.getOutputStream(), drResponse);
+    }
+
+    @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
 
         int expiresSecond = 600;
         int refreshSecond = 3600;
         DateTime dateTime = new DateTime();
         Calendar accessTokenTime = dateTime.toCalendar();
-        accessTokenTime.add(Calendar.SECOND,expiresSecond);
+        accessTokenTime.add(Calendar.SECOND, expiresSecond);
         Calendar refreshTokenTime = dateTime.toCalendar();
-        refreshTokenTime.add(Calendar.SECOND,refreshSecond);
+        refreshTokenTime.add(Calendar.SECOND, refreshSecond);
 
         // 成功认证刷新Token
         log.info("签发Token");
@@ -66,17 +77,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(accessTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles",userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
         String refreshToken = JWT.create()
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(refreshTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles",userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
-        response.setHeader("access_token",accessToken);
-        response.setHeader("refresh_token",refreshToken);
+        response.setHeader("access_token", accessToken);
+        response.setHeader("refresh_token", refreshToken);
 
         response.setContentType(APPLICATION_JSON_VALUE);
         TokenResponse tokenResponse = new TokenResponse();
@@ -86,14 +97,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         tokenResponse.setCreatedAt(dateTime);
         tokenResponse.setExpiresIn(expiresSecond);
         tokenResponse.setTokenType("bearer");
-        objectMapper.writeValue(response.getOutputStream(),tokenResponse);
-//        super.successfulAuthentication(request, response, chain, authentication);
+        objectMapper.writeValue(response.getOutputStream(), tokenResponse);
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    static class TokenResponse{
+    static class TokenResponse {
         @JsonProperty("access_token")
         private String accessToken;
         @JsonProperty("created_at")

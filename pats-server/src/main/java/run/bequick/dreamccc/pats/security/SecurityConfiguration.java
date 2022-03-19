@@ -1,5 +1,6 @@
 package run.bequick.dreamccc.pats.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder bCryptPasswordEncoder;
+    private final ObjectMapper objectMapper;
 
 
     @Override
@@ -37,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        var authenticationFilter = new JwtAuthenticationFilter(authenticationManager());
+        var authenticationFilter = new JwtAuthenticationFilter(authenticationManager(),objectMapper);
         authenticationFilter.setFilterProcessesUrl("/api/login");
 
         http.csrf().disable()
