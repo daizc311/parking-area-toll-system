@@ -1,26 +1,38 @@
 package run.bequick.dreamccc.pats.domain;
 
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+
+/**
+ * <h3>停车卡</h3>
+ *
+ * @author Daizc
+ */
 @Data
-@Table(name = "app_role", uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
+@Table(name = "parking_card")
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-public class AppRole {
+public class ParkingCard {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    @Schema(name = "卡内余额")
+    private BigDecimal amount;
+
+
+    @Schema(name = "消费/充值记录")
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<ParkingCardAmountLog> amountLogs;
 
     @CreatedDate
     private Date createTime;

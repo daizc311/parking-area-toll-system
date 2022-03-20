@@ -41,3 +41,6 @@ springdoc:
     - group: pats-server
       pathsToMatch: ["/**"]
       pathsToExclude: ["/rest/**"]
+  show-login-endpoint: true
+  cache:
+    disabled: true
