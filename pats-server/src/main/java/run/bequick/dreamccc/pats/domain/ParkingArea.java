@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * <h3>停车场</h3>
+ * <h3>停车场基本信息</h3>
  *
  * @author Daizc
  */

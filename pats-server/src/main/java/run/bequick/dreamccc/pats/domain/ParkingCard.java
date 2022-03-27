@@ -13,7 +13,7 @@ import java.util.List;
 
 
 /**
- * <h3>停车卡</h3>
+ * <h3>停车卡-数据库实体</h3>
  *
  * @author Daizc
  */
@@ -29,14 +29,41 @@ public class ParkingCard {
     @Schema(name = "卡内余额")
     private BigDecimal amount;
 
+    @Schema(name = "停车卡类型")
+    private ParkingCardType type;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Customer customer;
 
     @Schema(name = "消费/充值记录")
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<ParkingCardAmountLog> amountLogs;
+    @OneToMany(fetch = FetchType.LAZY,targetEntity = ParkingCardAmountLogDO.class)
+    private List<ParkingCardAmountLogDO> amountLogs;
+
+    @Schema(name = "有效期开始时间")
+    private Date validityBeginTime;
+
+    @Schema(name = "有效期开始时间")
+    private Date validityEndTime;
 
     @CreatedDate
     private Date createTime;
 
     @LastModifiedDate
     private Date updateTime;
+
+    private enum ParkingCardType {
+
+        RECHARGEABLE("可充值型", "永久停车卡"),
+        NOT_RECHARGEABLE("不可充值型", "一次性停车卡"),
+        FREE_LIMIT_TIME("限时免费型", "限时免费卡");
+
+        ParkingCardType(String innerName, String displayName) {
+            this.innerName = innerName;
+            this.displayName = displayName;
+        }
+
+        private final String innerName;
+        private final String displayName;
+    }
 }

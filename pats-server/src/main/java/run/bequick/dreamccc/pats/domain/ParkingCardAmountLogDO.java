@@ -1,22 +1,17 @@
 package run.bequick.dreamccc.pats.domain;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 
 /**
- * <h3>停车卡充值/消费记录</h3>
+ * <h3>停车卡充值/消费记录-数据库实体</h3>
  *
  * @author Daizc
  */
@@ -27,22 +22,25 @@ import java.util.Date;
 })
 @Entity
 @NoArgsConstructor
-public class ParkingCardAmountLog {
+public class ParkingCardAmountLogDO {
 
     @Id
     private Long id;
 
+    @Schema(name = "停车卡ID")
     private Long cardId;
 
+    @Schema(name = "变动前余额")
     private BigDecimal beforeAmount;
 
+    @Schema(name = "变动类型：充值/消费")
     private AmountChangeType type;
 
+    @Schema(name = "变动后余额")
     private BigDecimal afterAmount;
 
     @CreatedDate
     private Date createTime;
-
 
     enum AmountChangeType {
         /**
