@@ -5,26 +5,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Table(name = "app_role", uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
+@Table(name = "app_role")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppRole {
+public class AppRole extends AbstractAuditable<AppUser, Long> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+    @Column(unique = true, nullable = false)
     private String name;
-
-    @CreatedDate
-    private Date createTime;
-
-    @LastModifiedDate
-    private Date updateTime;
 }

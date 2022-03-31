@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,19 +21,16 @@ import java.util.Date;
 })
 @Entity
 @NoArgsConstructor
-public class CarParkingLogDO {
-
-    @Id
-    private Long id;
+public class CarParkingLogDO extends AbstractAuditable<AppUser, Long> {
 
     @Schema(name = "[客户信息]Id")
-    private String customerId;
+    private Long customerId;
 
     @Schema(name = "[客户信息]真实姓名")
     private String customerRealName;
 
     @Schema(name = "[车辆信息]Id")
-    private String carId;
+    private Long carId;
 
     @Schema(name = "[车辆信息]车牌号")
     private String carNumberPlate;
@@ -40,12 +38,20 @@ public class CarParkingLogDO {
     @Schema(name = "[车辆信息]车辆型号")
     private String carModelName;
 
-    @Schema(name = "入库时间")
+    @Schema(name = "[在库状态]Id")
+    @Column(nullable = false)
+    private Long statusId;
+
+    @Schema(name = "出/入库类型")
+    private CarParkingType type;
+
+    @Schema(name = "出/入库时间")
     private Date parkingBeginTime;
 
     @Schema(name = "出库时间")
     private Date parkingEndTime;
 
-    @CreatedDate
-    private Date createTime;
+    private enum CarParkingType {
+        IN,OUT
+    }
 }

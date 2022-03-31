@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.AbstractAuditable;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -22,10 +24,10 @@ import java.util.Date;
 })
 @Entity
 @NoArgsConstructor
-public class ParkingCardAmountLogDO {
+public class ParkingCardAmountLogDO extends AbstractAuditable<AppUser,Long> {
 
-    @Id
-    private Long id;
+    @Schema(name = "用户ID")
+    private Long userId;
 
     @Schema(name = "停车卡ID")
     private Long cardId;
@@ -38,9 +40,6 @@ public class ParkingCardAmountLogDO {
 
     @Schema(name = "变动后余额")
     private BigDecimal afterAmount;
-
-    @CreatedDate
-    private Date createTime;
 
     enum AmountChangeType {
         /**

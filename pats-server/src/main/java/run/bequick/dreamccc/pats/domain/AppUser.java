@@ -4,42 +4,35 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 
 @Data
-@Table(name = "app_user", uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
+@Table(name = "app_user")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppUser {
+public class AppUser extends AbstractAuditable<AppUser, Long> implements LoginAble {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(unique = true, nullable = false)
     private String username;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String salt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<AppRole> roles = new HashSet<>();
-
-    @CreatedDate
-    private Date createTime;
-
-    @LastModifiedDate
-    private Date updateTime;
 
 }

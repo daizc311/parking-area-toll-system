@@ -4,12 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.scheduling.annotation.Schedules;
+import org.springframework.data.jpa.domain.AbstractAuditable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -19,22 +16,21 @@ import java.util.Date;
  */
 @Data
 @Table(name = "car_info", indexes = {
-        @Index(name = "idx_numberPlate", columnList = "numberPlate",unique = true)
 })
 @Entity
 @NoArgsConstructor
 
-public class CarInfo {
+public class CarInfo extends AbstractAuditable<AppUser, Long> {
 
-    @Id
-    private Long id;
+    @Schema(name = "与车辆关联的客户信息")
+    @ManyToOne
+    @JoinColumn(name = "customer_id",referencedColumnName = "id")
+    private Customer customer;
 
     @Schema(name = "车牌号")
+    @Column(name = "number_plate",unique = true,nullable = false)
     private String numberPlate;
 
     @Schema(name = "车辆型号")
     private String modelName;
-
-    @CreatedDate
-    private Date createTime;
 }
