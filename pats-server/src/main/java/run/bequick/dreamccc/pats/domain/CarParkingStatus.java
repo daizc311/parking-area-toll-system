@@ -3,7 +3,6 @@ package run.bequick.dreamccc.pats.domain;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
@@ -18,7 +17,7 @@ import java.util.Date;
 @Table(name = "car_parking_status", indexes = {})
 @Entity
 @NoArgsConstructor
-public class CarParkingStatusDO extends AbstractAuditable<AppUser, Long> {
+public class CarParkingStatus extends AbstractAuditable<AppUser, Long> {
 
     @OneToOne
     @JoinColumn(name = "car_info_id", referencedColumnName = "id")

@@ -19,8 +19,8 @@ import java.util.Date;
  */
 @Data
 @Table(name = "parking_card_amonut_log", indexes = {
-        @Index(name = "idx_pcal_type", columnList = "type"),
-        @Index(name = "idx_pcal_createTime", columnList = "createTime")
+        @Index(name = "idx_pcal_userId", columnList = "userId"),
+        @Index(name = "idx_pcal_cardId", columnList = "cardId"),
 })
 @Entity
 @NoArgsConstructor

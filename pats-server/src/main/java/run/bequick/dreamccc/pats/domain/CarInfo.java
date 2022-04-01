@@ -3,11 +3,9 @@ package run.bequick.dreamccc.pats.domain;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /**
  * <h3>车辆信息-数据库实体</h3>
@@ -28,7 +26,7 @@ public class CarInfo extends AbstractAuditable<AppUser, Long> {
     private Customer customer;
 
     @Schema(name = "车牌号")
-    @Column(name = "number_plate",unique = true,nullable = false)
+    @Column(unique = true,nullable = false)
     private String numberPlate;
 
     @Schema(name = "车辆型号")

@@ -16,8 +16,6 @@ import java.util.Date;
  */
 @Data
 @Table(name = "car_parking_log", indexes = {
-        @Index(name = "idx_cpl_parkingBeginTime", columnList = "parkingBeginTime"),
-        @Index(name = "idx_cpl_parkingEndTime", columnList = "parkingEndTime")
 })
 @Entity
 @NoArgsConstructor
@@ -46,10 +44,7 @@ public class CarParkingLogDO extends AbstractAuditable<AppUser, Long> {
     private CarParkingType type;
 
     @Schema(name = "出/入库时间")
-    private Date parkingBeginTime;
-
-    @Schema(name = "出库时间")
-    private Date parkingEndTime;
+    private Date parkingDate;
 
     private enum CarParkingType {
         IN,OUT
