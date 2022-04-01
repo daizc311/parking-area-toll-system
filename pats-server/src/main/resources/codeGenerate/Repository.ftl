@@ -1,10 +1,10 @@
-package ${targetPackage};
+package ${repoPackage};
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ${entityPackage}.${entityClassName};
 
 @Repository
-public interface ${entityClassName}Repository extends JpaRepository<${entityClassName},Long> {
+public interface ${repoClassName} extends JpaRepository<${entityClassName},Long> {
 
 }

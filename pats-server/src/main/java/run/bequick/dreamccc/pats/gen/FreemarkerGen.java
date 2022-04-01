@@ -1,22 +1,27 @@
 package run.bequick.dreamccc.pats.gen;
 
+import cn.hutool.core.io.LineHandler;
+import cn.hutool.core.lang.func.Func;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import run.bequick.dreamccc.pats.domain.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.HashMap;
+import java.util.function.Function;
 
 @Log4j2
 public class FreemarkerGen {
 
-    final static String PROJECT_PATH = "D:\\IdeaProjects\\demo\\pats-server\\";
+    public final static String BASE_PROJECT_PATH = "D:\\IdeaProjects\\demo\\pats-server\\";
+    public static final String BASE_PROJECT_PACKAGE = "run.bequick.dreamccc.pats";
     public static final String JAVA_SRC_PATH = "src\\main\\java\\";
     public static final String KOTLIN_SRC_PATH = "src\\main\\kotlin\\";
 
@@ -31,8 +36,34 @@ public class FreemarkerGen {
         configuration.setDirectoryForTemplateLoading(resource.getFile());
         configuration.unsetCacheStorage();
         // 根据模板名称获取路径下的模板
-        Template template = configuration.getTemplate("CommonRepository.ftl");
-
+//        Template repoTemplate = ;
+//        Template dServiceTemplate = configuration.getTemplate("DService.ftl");
+//        Template dServiceImplTemplate = configuration.getTemplate("DServiceImpl.ftl");
+        Template[] templates = {
+                configuration.getTemplate("Repository.ftl"),
+                configuration.getTemplate("DService.ftl"),
+                configuration.getTemplate("DServiceImpl.ftl"),
+        };
+//        var defaultTemplateProvider = (Function<String, Template>) (String s) -> {
+//            try {
+//                return configuration.getTemplate(s + ".ftl");
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        };
+//        var defaultPackageNameProvider = (Function<String, String>) (String s) -> BASE_PROJECT_PACKAGE + "." + s.toLowerCase();
+//        var defaultFilePathProvider = (Function<String, String>) (String s) -> BASE_PROJECT_PATH + JAVA_SRC_PATH + (BASE_PROJECT_PACKAGE + "." + s.toLowerCase()).replace('.', '\\');
+//        GenEntity[] genEntities = {
+//                new GenEntity("Repository", defaultTemplateProvider, defaultPackageNameProvider, defaultFilePathProvider),
+//                new GenEntity("DService", defaultTemplateProvider,
+//                        s -> BASE_PROJECT_PACKAGE + ".service.data",
+//                        s -> BASE_PROJECT_PATH + JAVA_SRC_PATH + (BASE_PROJECT_PACKAGE + ".service.data").replace('.', '\\')
+//                ),
+//                new GenEntity("DServiceImpl", defaultTemplateProvider,
+//                        s -> BASE_PROJECT_PACKAGE + ".service.data",
+//                        s -> BASE_PROJECT_PATH + JAVA_SRC_PATH + (BASE_PROJECT_PACKAGE + ".service.data").replace('.', '\\')
+//                ),
+//        };
         Class<?>[] classes = {
                 ParkingCard.class,
                 ParkingCardAmountLogDO.class,
@@ -44,44 +75,91 @@ public class FreemarkerGen {
         for (Class<?> aClass : classes) {
             String entityPackage = aClass.getPackageName();
             String entityClassName = aClass.getSimpleName();
-            String targetClassName = entityClassName + "Repository";
-            String targetPackage = "run.bequick.dreamccc.pats.repository";
-            String targetFilePath = targetPackage.replace(".", "\\");
+            //
+            String repoClassName = entityClassName + "Repository";
+            String repoPackage = BASE_PROJECT_PACKAGE + ".repository";
+            String repoFilePath = repoPackage.replace(".", "\\") + "\\";
+            //
+            String dServiceClassName = entityClassName + "DService";
+            String dServicePackage = BASE_PROJECT_PACKAGE + ".service.data";
+            String dServiceFilePath = dServicePackage.replace(".", "\\") + "\\";
+            //
+            String dServiceImplClassName = entityClassName + "DServiceImpl";
+            String dServiceImplPackage = BASE_PROJECT_PACKAGE + ".service.data";
+            String dServiceImplFilePath = dServiceImplPackage.replace(".", "\\") + "\\";
+
             var map = new HashMap<String, String>();
             map.put("entityPackage", entityPackage);
             map.put("entityClassName", entityClassName);
-            map.put("targetClassName", targetClassName);
-            map.put("targetPackage", targetPackage);
-            map.put("targetFilePath", targetFilePath);
+//
+            map.put("repoClassName", repoClassName);
+            map.put("repoPackage", repoPackage);
+//                map.put("repoFilePath", repoFilePath);
+            map.put("dServiceClassName", dServiceClassName);
+            map.put("dServicePackage", dServicePackage);
+//                map.put("dServiceFilePath", dServiceFilePath);
+            map.put("dServiceImplClassName", dServiceImplClassName);
+            map.put("dServiceImplPackage", dServiceImplPackage);
+//                map.put("dServiceImplFilePath", dServiceImplFilePath);
+//                    configuration.getTemplate("DService.ftl"),
+//                    configuration.getTemplate("DServiceImpl.ftl"),
+
+            writer(generate(configuration.getTemplate("Repository.ftl"), map),
+                    BASE_PROJECT_PATH + JAVA_SRC_PATH + repoFilePath + repoClassName + ".java");
+            writer(generate(configuration.getTemplate("DService.ftl"), map),
+                    BASE_PROJECT_PATH + JAVA_SRC_PATH + dServiceFilePath + dServiceClassName + ".java");
+            writer(generate(configuration.getTemplate("DServiceImpl.ftl"), map),
+                    BASE_PROJECT_PATH + JAVA_SRC_PATH + dServiceImplFilePath + dServiceImplClassName + ".java");
+
+        }
+    }
+
+    private static String generate(Template template, HashMap<String, String> map) {
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        var writer = new OutputStreamWriter(byteArrayOutputStream);
+        try {
+            template.process(map, writer);
+        } catch (TemplateException e) {
+            log.error("模板发生异常", e);
+            throw new RuntimeException(e);
+        } catch (IOException ignored) {
+        }
+        return byteArrayOutputStream.toString();
+    }
+
+    private static void writer(String data, String filePath) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            log.info("开始写入文件:{}", file.getName());
+            var writer = new OutputStreamWriter(new FileOutputStream(file));
+            writer.write(data);
+            writer.flush();
+            writer.close();
+            log.debug("文件写入完成:path={}", file.getAbsolutePath());
+        } else {
+            log.debug("跳过已存在的文件:path={}", file.getAbsolutePath());
+        }
+    }
 
 
-            File file = new File(PROJECT_PATH + JAVA_SRC_PATH + targetFilePath + "\\" +
-                    targetClassName + ".java");
-            if (!file.exists()) {
-                log.info("开始生成:{}", targetClassName + ".java");
-                var writer = new OutputStreamWriter(new FileOutputStream(file));
-                template.process(map, writer);
-            } else {
-                log.info("文件[{}]已存在，跳过生成\n跳过生成 path={}", targetClassName + ".java", file.getAbsolutePath());
-            }
+    @Getter
+    @RequiredArgsConstructor
+    static class GenEntity {
+        private final String name;
+        private final Function<String, Template> templateProvider;
+        private final Function<String, String> packageNameProvider;
+        private final Function<String, String> filePathProvider;
+
+        public Template getTemplate() {
+            return templateProvider.apply(this.name);
         }
 
+        public String getPackageName() {
+            return packageNameProvider.apply(this.name);
+        }
 
-//        Entity entity = new Entity();
-
-
-//        new JavaProperties().var
-//        String javaName = javaProperties.getEntityName().concat(ext);
-//        String packageName = javaProperties.getPkg();
-//
-//        String out = rootPath.concat(Stream.of(packageName.split("\\."))
-//                .collect(Collectors.joining("/", "/", "/" + javaName)));
+        public String getFilePath() {
+            return filePathProvider.apply(this.name);
+        }
     }
-//
-//    @Data
-//    static class Entity {
-//        private String targetPackageName;
-//        private String targetClassName;
-//        private String
-//    }
 }
