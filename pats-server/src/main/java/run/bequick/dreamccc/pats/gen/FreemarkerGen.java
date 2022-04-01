@@ -3,17 +3,22 @@ package run.bequick.dreamccc.pats.gen;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import run.bequick.dreamccc.pats.domain.*;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
+@Log4j2
 public class FreemarkerGen {
 
     final static String PROJECT_PATH = "D:\\IdeaProjects\\demo\\pats-server\\";
+    public static final String JAVA_SRC_PATH = "src\\main\\java\\";
+    public static final String KOTLIN_SRC_PATH = "src\\main\\kotlin\\";
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -49,12 +54,16 @@ public class FreemarkerGen {
             map.put("targetPackage", targetPackage);
             map.put("targetFilePath", targetFilePath);
 
-            var writer = new OutputStreamWriter(new FileOutputStream(
-                    PROJECT_PATH +
-                            "src\\main\\java\\" +
-                            targetFilePath+"\\"+
-                            targetClassName + ".java"));
-            template.process(map, writer);
+
+            File file = new File(PROJECT_PATH + JAVA_SRC_PATH + targetFilePath + "\\" +
+                    targetClassName + ".java");
+            if (!file.exists()) {
+                log.info("开始生成:{}", targetClassName + ".java");
+                var writer = new OutputStreamWriter(new FileOutputStream(file));
+                template.process(map, writer);
+            } else {
+                log.info("文件[{}]已存在，跳过生成\n跳过生成 path={}", targetClassName + ".java", file.getAbsolutePath());
+            }
         }
 
 
