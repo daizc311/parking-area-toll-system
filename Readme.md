@@ -1,5 +1,9 @@
-随着我国的经济发展，私家车保有量不断增长，停车场随处可见。设计一套停车场收费管理系统是为停车场管理者和用户更好的维护车位信息管理业务很有必要。主要功能括不限于：停车位信息管理、停车卡信息管理、缴费信息管理、私家车进场登记、司机车离场收费等功能，以及基本账号管理、权限管理、登陆认证功能。系统能运行，界面友好。
-
+## Parking Area Toll System
+该仓库为本科毕业论文项目所用。
+ - pats-server 后端服务本体
+ - 
+ 
+## 
 https://docs.spring.io/spring-data/rest/docs/current/reference/html/#repository-resources.default-status-codes
 
 https://docs.spring.io/spring-data/rest/docs/current/reference/html/#customizing-sdr.http-methods
