@@ -1,4 +1,4 @@
-package run.bequick.dreamccc.pats.common.stream;
+package run.bequick.dreamccc.pats.util.stream;
 
 import java.io.Serializable;
 import java.util.Comparator;
@@ -31,22 +31,6 @@ public class StreamEx {
         return t -> filterMap.putIfAbsent(function.apply(t), Boolean.TRUE) == null;
     }
 
-
-//    public static void sortByKey(){
-//
-//
-//        return new Comparator() {
-//            @Override
-//            public int compare(Object o1, Object o2) {
-//                return 0;
-//            }
-//
-//            @Override
-//            public boolean equals(Object obj) {
-//                return false;
-//            }
-//        };
-//    }
 
     /**
      * <h3>safeGet</h3>

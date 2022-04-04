@@ -18,6 +18,12 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>run.bequick.dreamccc</groupId>
+            <artifactId>pats-api</artifactId>
+            <version>${revise}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
         <dependency>
             <groupId>org.freemarker</groupId>
@@ -91,11 +97,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>

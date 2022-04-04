@@ -36,34 +36,11 @@ public class FreemarkerGen {
         configuration.setDirectoryForTemplateLoading(resource.getFile());
         configuration.unsetCacheStorage();
         // 根据模板名称获取路径下的模板
-//        Template repoTemplate = ;
-//        Template dServiceTemplate = configuration.getTemplate("DService.ftl");
-//        Template dServiceImplTemplate = configuration.getTemplate("DServiceImpl.ftl");
         Template[] templates = {
                 configuration.getTemplate("Repository.ftl"),
                 configuration.getTemplate("DService.ftl"),
                 configuration.getTemplate("DServiceImpl.ftl"),
         };
-//        var defaultTemplateProvider = (Function<String, Template>) (String s) -> {
-//            try {
-//                return configuration.getTemplate(s + ".ftl");
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        };
-//        var defaultPackageNameProvider = (Function<String, String>) (String s) -> BASE_PROJECT_PACKAGE + "." + s.toLowerCase();
-//        var defaultFilePathProvider = (Function<String, String>) (String s) -> BASE_PROJECT_PATH + JAVA_SRC_PATH + (BASE_PROJECT_PACKAGE + "." + s.toLowerCase()).replace('.', '\\');
-//        GenEntity[] genEntities = {
-//                new GenEntity("Repository", defaultTemplateProvider, defaultPackageNameProvider, defaultFilePathProvider),
-//                new GenEntity("DService", defaultTemplateProvider,
-//                        s -> BASE_PROJECT_PACKAGE + ".service.data",
-//                        s -> BASE_PROJECT_PATH + JAVA_SRC_PATH + (BASE_PROJECT_PACKAGE + ".service.data").replace('.', '\\')
-//                ),
-//                new GenEntity("DServiceImpl", defaultTemplateProvider,
-//                        s -> BASE_PROJECT_PACKAGE + ".service.data",
-//                        s -> BASE_PROJECT_PATH + JAVA_SRC_PATH + (BASE_PROJECT_PACKAGE + ".service.data").replace('.', '\\')
-//                ),
-//        };
         Class<?>[] classes = {
                 ParkingCard.class,
                 ParkingCardAmountLogDO.class,
@@ -94,18 +71,15 @@ public class FreemarkerGen {
 //
             map.put("repoClassName", repoClassName);
             map.put("repoPackage", repoPackage);
-//                map.put("repoFilePath", repoFilePath);
+//
             map.put("dServiceClassName", dServiceClassName);
             map.put("dServicePackage", dServicePackage);
-//                map.put("dServiceFilePath", dServiceFilePath);
+//
             map.put("dServiceImplClassName", dServiceImplClassName);
             map.put("dServiceImplPackage", dServiceImplPackage);
-//                map.put("dServiceImplFilePath", dServiceImplFilePath);
-//                    configuration.getTemplate("DService.ftl"),
-//                    configuration.getTemplate("DServiceImpl.ftl"),
 
             writer(generate(configuration.getTemplate("Repository.ftl"), map),
-                    BASE_PROJECT_PATH + JAVA_SRC_PATH + repoFilePath + repoClassName + ".java");
+                    BASE_PROJECT_PATH + JAVA_SRC_PATH + repoFilePath + repoClassName +   ".java");
             writer(generate(configuration.getTemplate("DService.ftl"), map),
                     BASE_PROJECT_PATH + JAVA_SRC_PATH + dServiceFilePath + dServiceClassName + ".java");
             writer(generate(configuration.getTemplate("DServiceImpl.ftl"), map),
