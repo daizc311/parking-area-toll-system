@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface CustomerRepository extends JpaRepository<Customer,Long> {
 
     Optional<Customer> getByLoginName(String loginName);
+    Optional<Customer> getByMobile(String loginName);
 }

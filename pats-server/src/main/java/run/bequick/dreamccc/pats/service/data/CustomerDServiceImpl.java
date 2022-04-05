@@ -22,7 +22,7 @@ public class CustomerDServiceImpl implements CustomerDService {
     @ServiceLog(value = "新增客户 - {pos} - realName:{},mobile:{}", paramEl = {"#root[0].realName", "#root[0].mobile"})
     public Customer saveCustomer(ThreeFactor threeFactor, String loginName, String password) {
 
-        var salt = UUID.fastUUID().toString().replace("-", "");
+        var salt = UUID.fastUUID().toString(true);
         var encryptPassword = getPasswordEncryptor(salt).encryptPassword(password);
 
         Customer addC = new Customer();
@@ -39,7 +39,9 @@ public class CustomerDServiceImpl implements CustomerDService {
     @ServiceLog(value = "客户登录 - {pos} - loginName:{}", paramEl = {"#root[0]"})
     public Customer login(String loginName, String password) {
 
-        Customer byLoginName = repository.getByLoginName(loginName).orElseThrow(() -> new BusinessException("没有找到用户"));
+        Customer byLoginName = repository.getByLoginName(loginName)
+                .orElseGet(() -> repository.getByMobile(loginName)
+                        .orElseThrow(() -> new BusinessException("没有找到用户")));
         if (getPasswordEncryptor(byLoginName.getSalt()).checkPassword(password, byLoginName.getPassword())) {
             return byLoginName;
         }

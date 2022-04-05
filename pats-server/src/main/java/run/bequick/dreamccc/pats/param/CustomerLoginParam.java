@@ -8,11 +8,11 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class CustomerLoginParam {
 
-    @Schema(name = "登录名称")
+    @Schema(description = "登录名称")
     @NotBlank
     private String loginName;
 
-    @Schema(name = "登录密码")
+    @Schema(description = "登录密码")
     @NotBlank
     private String password;
 
