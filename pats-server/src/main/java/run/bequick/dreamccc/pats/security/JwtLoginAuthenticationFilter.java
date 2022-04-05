@@ -62,7 +62,7 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
 
-        int expiresSecond = 600;
+        int expiresSecond = 1800;
         int refreshSecond = 3600;
         DateTime dateTime = new DateTime();
         Calendar accessTokenTime = dateTime.toCalendar();

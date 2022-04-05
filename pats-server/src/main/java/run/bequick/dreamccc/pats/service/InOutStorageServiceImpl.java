@@ -21,7 +21,7 @@ public class InOutStorageServiceImpl implements InOutStorageService {
 
     @Override
     @Transactional
-    @ServiceLog(value = "车辆入库 - numberPlate:{}",paramEl = {"root[0].carInfo.numberPlate"})
+    @ServiceLog(value = "车辆入库 - {pos} - numberPlate:{}",paramEl = {"#root[0].carInfo.numberPlate"})
     public void inStorage(ApiInStorageParam param) {
 
         var simpleCarInfo = param.getCarInfo();

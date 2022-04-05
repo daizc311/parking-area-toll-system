@@ -2,6 +2,7 @@ package run.bequick.dreamccc.pats.param;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

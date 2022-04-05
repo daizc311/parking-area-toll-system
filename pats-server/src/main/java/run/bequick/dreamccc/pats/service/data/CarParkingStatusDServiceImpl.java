@@ -23,7 +23,7 @@ public class CarParkingStatusDServiceImpl implements CarParkingStatusDService {
 
     @Override
     @Transactional
-    @ServiceLog(value = "新增在库记录 - carId:{},date:{}",paramEl = {"root[0].id","root[1]"})
+    @ServiceLog(value = "新增在库记录 - {pos} - carId:{},date:{}",paramEl = {"#root[0].id","#root[1]"})
     public void addStorageStatus(CarInfo carInfo, Date inStorageTime) {
         // 添加在库记录
         var addCPS = new CarParkingStatus();
@@ -36,7 +36,7 @@ public class CarParkingStatusDServiceImpl implements CarParkingStatusDService {
 
     @Override
     @Transactional
-    @ServiceLog(value = "删除在库记录 - carId:{},date:{}",paramEl = {"root[0].id","root[1]"})
+    @ServiceLog(value = "删除在库记录 - {pos} - carId:{},date:{}",paramEl = {"#root[0].id","#root[1]"})
     public void deleteStorageStatus(CarInfo carInfo, Date outStorageTime) {
         try {
             // 查询在库记录

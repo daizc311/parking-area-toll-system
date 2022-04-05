@@ -33,6 +33,7 @@ import static run.bequick.dreamccc.pats.security.SecurityConstant.*;
 public class JwtAuthorizationFilter extends OncePerRequestFilter implements Ordered {
 
     private final ObjectMapper objectMapper;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
@@ -50,21 +51,22 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Orde
                 jwtTokenStr = authParameter;
             }
 
-            if (Strings.isBlank(jwtTokenStr)) {
-                throw new JWTVerificationException("未携带token");
+            if (Strings.isNotBlank(jwtTokenStr)) {
+                Algorithm algorithm = Algorithm.HMAC256(SECRET);
+                JWTVerifier jwtVerifier = JWT.require(algorithm).build();
+                DecodedJWT jwt = jwtVerifier.verify(jwtTokenStr);
+                String username = jwt.getSubject();
+                String[] roles = jwt.getClaim("roles").asArray(String.class);
+                String userId = jwt.getClaim("userId").asString();
+                var grantedAuthorityList = Stream.of(roles)
+                        .map(SimpleGrantedAuthority::new)
+                        .collect(Collectors.toList());
+                var authenticationToken = new JwtUsernamePasswordAuthenticationToken(userId, username, null, grantedAuthorityList);
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-
-            Algorithm algorithm = Algorithm.HMAC256(SECRET);
-            JWTVerifier jwtVerifier = JWT.require(algorithm).build();
-            DecodedJWT jwt = jwtVerifier.verify(jwtTokenStr);
-            String username = jwt.getSubject();
-            String[] roles = jwt.getClaim("roles").asArray(String.class);
-            String userId = jwt.getClaim("userId").asString();
-            var grantedAuthorityList = Stream.of(roles)
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
-            var authenticationToken = new JwtUsernamePasswordAuthenticationToken(userId, username, null, grantedAuthorityList);
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//            if (Strings.isBlank(jwtTokenStr)) {
+//                throw new JWTVerificationException("未携带token");
+//            }
             filterChain.doFilter(request, response);
         } catch (JWTVerificationException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -76,6 +78,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Orde
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE+10;
+        return Ordered.HIGHEST_PRECEDENCE + 10;
     }
 }

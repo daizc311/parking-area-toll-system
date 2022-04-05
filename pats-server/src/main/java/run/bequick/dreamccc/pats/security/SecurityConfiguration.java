@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -38,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        var authenticationFilter = new JwtLoginAuthenticationFilter(authenticationManager(),objectMapper);
+        var authenticationFilter = new JwtLoginAuthenticationFilter(authenticationManager(), objectMapper);
         authenticationFilter.setFilterProcessesUrl(SecurityConstant.LOGIN_PATH);
 
         http.csrf().disable()
@@ -47,7 +48,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .addFilter(authenticationFilter);
+                .addFilter(authenticationFilter)
+                .addFilterBefore(new JwtAuthorizationFilter(objectMapper), LogoutFilter.class);
+
     }
 
     @Override
@@ -56,8 +59,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter(ObjectMapper objectMapper){
-        return new JwtAuthorizationFilter(objectMapper);
-    }
 }

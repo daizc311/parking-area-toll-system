@@ -31,7 +31,8 @@ spring:
   redis:
     host: cn.dreamccc.cn
     port: 8379
-
+  jackson:
+    date-format: "yyyy-MM-dd HH:mm:ss"
 debug: true
 logging:
   level:

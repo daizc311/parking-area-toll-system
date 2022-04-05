@@ -3,6 +3,7 @@ package run.bequick.dreamccc.pats.api;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import run.bequick.dreamccc.pats.common.DrResponse;
 import run.bequick.dreamccc.pats.param.ApiFeePaymentParam;
@@ -21,7 +22,7 @@ public interface PatsActionApi {
      */
     @PostMapping("/inStorage")
     @Schema(title="API入库接口")
-    DrResponse<Object> inStorage(@Validated ApiInStorageParam param);
+    DrResponse<Object> inStorage(@RequestBody @Validated ApiInStorageParam param);
 
     /**
      * <p>API缴费支付接口</p>
@@ -30,7 +31,7 @@ public interface PatsActionApi {
      * @return DrResponse
      */
     @PostMapping("/feePayment")
-    DrResponse<Object> feePayment(@Validated ApiFeePaymentParam param);
+    DrResponse<Object> feePayment(@RequestBody @Validated ApiFeePaymentParam param);
 
     /**
      * <p>API出库接口</p>
@@ -39,5 +40,5 @@ public interface PatsActionApi {
      * @return DrResponse
      */
     @PostMapping("/outStorage")
-    DrResponse<Object> outStorage(@Validated ApiOutStorageParam param);
+    DrResponse<Object> outStorage(@RequestBody @Validated ApiOutStorageParam param);
 }

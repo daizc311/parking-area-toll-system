@@ -3,6 +3,7 @@ package run.bequick.dreamccc.pats.service.data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarInfo;
 import run.bequick.dreamccc.pats.repository.CarInfoRepository;
 
@@ -32,10 +33,11 @@ public class CarInfoDServiceImpl implements CarInfoDService {
     public Optional<CarInfo> getByNumberPlate(@Validated @NotEmpty String numberPlate) {
 
         var entity = repository.getByNumberPlate(numberPlate);
-        return Optional.of(entity);
+        return Optional.ofNullable(entity);
     }
 
     @Override
+    @ServiceLog(value = "保存车辆信息 - {pos} - numberPlate:{}",paramEl = {"#root[0].numberPlate"})
     public CarInfo saveCarInfo(@Validated CarInfo entity) {
 
         return repository.save(entity);

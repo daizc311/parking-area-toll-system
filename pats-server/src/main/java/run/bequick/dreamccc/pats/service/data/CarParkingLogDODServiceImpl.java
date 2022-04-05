@@ -24,7 +24,7 @@ public class CarParkingLogDODServiceImpl implements CarParkingLogDODService {
 
     @Transactional
     @Override
-    @ServiceLog(value = "添加出入库记录,方向:{},carId:{}", paramEl = {"#root[0]", "#root[1].carInfo.id"})
+    @ServiceLog(value = "添加出入库记录 - {pos} - 方向:{},carId:{}", paramEl = {"#root[0]", "#root[1].carInfo.id"})
     public void addStorageLog(@Validated @NotNull CarParkingLogDO.CarParkingType type, CarParkingStatus carParkingStatus) {
         var carInfo = carParkingStatus.getCarInfo();
         var addInLog = new CarParkingLogDO();
