@@ -28,6 +28,10 @@ spring:
       default-media-type: application/json
       return-body-on-create: true
       return-body-on-update: true
+  redis:
+    host: cn.dreamccc.cn
+    port: 8379
+
 debug: true
 logging:
   level:

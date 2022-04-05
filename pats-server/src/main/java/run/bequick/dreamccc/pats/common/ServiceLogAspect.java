@@ -1,4 +1,4 @@
-package run.bequick.dreamccc.pats.config;
+package run.bequick.dreamccc.pats.common;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,7 +14,7 @@ public class ServiceLogAspect {
 
     private final static Logger defaultLogger = LoggerFactory.getLogger("ServiceLog");
 
-    @Around("")
+    @Around("@annotation(ServiceLog)")
     public Object serviceLog(ProceedingJoinPoint joinPoint) throws Throwable {
         JoinPoint.StaticPart staticPart = joinPoint.getStaticPart();
 

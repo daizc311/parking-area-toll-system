@@ -1,7 +1,4 @@
-package run.bequick.dreamccc.pats.config;
-
-import org.slf4j.Logger;
-import org.slf4j.helpers.NOPLogger;
+package run.bequick.dreamccc.pats.common;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

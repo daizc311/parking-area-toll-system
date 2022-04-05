@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import run.bequick.dreamccc.pats.config.ServiceLog;
+import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
 import run.bequick.dreamccc.pats.domain.CarParkingStatus;
 import run.bequick.dreamccc.pats.domain.Customer;

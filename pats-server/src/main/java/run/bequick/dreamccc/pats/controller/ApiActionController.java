@@ -1,5 +1,7 @@
 package run.bequick.dreamccc.pats.controller;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,24 +20,24 @@ public class ApiActionController implements PatsActionApi {
     private final InOutStorageService inOutStorageService;
 
     @Override
-    public DrResponse<Object> inStorage(@Validated ApiInStorageParam param){
+    public DrResponse<Object> inStorage(@Validated ApiInStorageParam param) {
 
-        boolean ok = inOutStorageService.inStorage(param);
-        return DrResponse.data(ok);
+        inOutStorageService.inStorage(param);
+        return DrResponse.success();
     }
 
     @Override
-    public DrResponse<Object> feePayment(@Validated ApiFeePaymentParam param){
+    public DrResponse<Object> feePayment(@Validated ApiFeePaymentParam param) {
 
-        boolean ok = inOutStorageService.feePayment(param);
-        return DrResponse.data(ok);
+        inOutStorageService.feePayment(param);
+        return DrResponse.success();
     }
 
     @Override
-    public DrResponse<Object> outStorage(@Validated ApiOutStorageParam param){
+    public DrResponse<Object> outStorage(@Validated ApiOutStorageParam param) {
 
-        boolean ok = inOutStorageService.outStorage(param);
-        return DrResponse.data(ok);
+        inOutStorageService.outStorage(param);
+        return DrResponse.success();
     }
 
 }

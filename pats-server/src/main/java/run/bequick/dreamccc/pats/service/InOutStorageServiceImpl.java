@@ -2,56 +2,56 @@ package run.bequick.dreamccc.pats.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarInfo;
-import run.bequick.dreamccc.pats.domain.CarParkingStatus;
 import run.bequick.dreamccc.pats.param.ApiFeePaymentParam;
 import run.bequick.dreamccc.pats.param.ApiInStorageParam;
 import run.bequick.dreamccc.pats.param.ApiOutStorageParam;
-import run.bequick.dreamccc.pats.repository.CarInfoRepository;
-import run.bequick.dreamccc.pats.repository.CarParkingLogDORepository;
-import run.bequick.dreamccc.pats.repository.CarParkingStatusRepository;
+import run.bequick.dreamccc.pats.service.data.CarInfoDService;
+import run.bequick.dreamccc.pats.service.data.CarParkingStatusDService;
 
-import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class InOutStorageServiceImpl implements InOutStorageService {
 
-    private final CarParkingLogDORepository carParkingLogDORepository;
-    private final CarParkingStatusRepository carParkingStatusRepository;
-    private final CarInfoRepository carInfoRepository;
+    private final CarParkingStatusDService carParkingStatusDService;
+    private final CarInfoDService carInfoDService;
 
     @Override
-    public boolean inStorage(ApiInStorageParam param) {
+    @Transactional
+    @ServiceLog(value = "车辆入库 - numberPlate:{}",paramEl = {"root[0].carInfo.numberPlate"})
+    public void inStorage(ApiInStorageParam param) {
 
         var simpleCarInfo = param.getCarInfo();
         var inStorageTime = param.getInStorageTime();
+        var numberPlate = simpleCarInfo.getNumberPlate();
 
-        String numberPlate = simpleCarInfo.getNumberPlate();
+        CarInfo carInfo = carInfoDService.getByNumberPlate(numberPlate).orElseGet(() -> {
 
-        CarInfo carInfo;
-        try {
-            carInfo = carInfoRepository.findCarInfoByNumberPlate(numberPlate);
-        } catch (EntityNotFoundException e) {
             var addCI = new CarInfo();
             addCI.setModelName(simpleCarInfo.getModelName());
             addCI.setNumberPlate(simpleCarInfo.getNumberPlate());
             addCI.setColor(simpleCarInfo.getColor());
-            carInfo = carInfoRepository.save(addCI);
-        }
+            return carInfoDService.saveCarInfo(addCI);
+        });
 
-
-
-        return false;
+        carParkingStatusDService.addStorageStatus(carInfo, inStorageTime);
     }
 
     @Override
-    public boolean feePayment(ApiFeePaymentParam param) {
-        return false;
+    public void feePayment(ApiFeePaymentParam param) {
+
     }
 
     @Override
-    public boolean outStorage(ApiOutStorageParam param) {
-        return false;
+    public void outStorage(ApiOutStorageParam param) {
+
+        var paramNumberPlate = param.getNumberPlate();
+        // TODO 检查是否可以出库
+
+        // TODO 出库
+
     }
 }

@@ -6,9 +6,9 @@ import run.bequick.dreamccc.pats.param.ApiOutStorageParam;
 
 public interface InOutStorageService {
 
-    boolean inStorage(ApiInStorageParam param);
+    void inStorage(ApiInStorageParam param);
 
-    boolean feePayment(ApiFeePaymentParam param);
+    void feePayment(ApiFeePaymentParam param);
 
-    boolean outStorage(ApiOutStorageParam param);
+    void outStorage(ApiOutStorageParam param);
 }

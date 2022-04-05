@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,7 +30,7 @@ import static run.bequick.dreamccc.pats.security.SecurityConstant.*;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthorizationFilter extends OncePerRequestFilter {
+public class JwtAuthorizationFilter extends OncePerRequestFilter implements Ordered {
 
     private final ObjectMapper objectMapper;
     @Override
@@ -71,5 +72,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             objectMapper.writeValue(response.getOutputStream(), DrResponse.failed(e.getMessage()));
             log.info(StrFormatter.format("Token验证失败:{}", e.getMessage()));
         }
+    }
+
+    @Override
+    public int getOrder() {
+        return Ordered.HIGHEST_PRECEDENCE+10;
     }
 }
