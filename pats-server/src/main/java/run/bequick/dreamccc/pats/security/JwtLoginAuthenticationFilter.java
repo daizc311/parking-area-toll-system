@@ -43,7 +43,7 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
         String password = request.getParameter("password");
         log.info("用户[{}]尝试登录", username);
 
-        return authenticationManager.authenticate(new JwtUsernamePasswordAuthenticationToken(username, password));
+        return authenticationManager.authenticate(new JwtUsernamePasswordAuthenticationToken(UserType.APP_USER,username, password));
     }
 
     @Override
@@ -78,6 +78,7 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(accessTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
+                .withClaim("userType", "APP_USER")
                 .withClaim("userId",userDetail.getUserId())
                 .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
@@ -85,6 +86,7 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(refreshTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
+                .withClaim("userType", "APP_USER")
                 .withClaim("userId",userDetail.getUserId())
                 .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);

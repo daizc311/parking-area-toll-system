@@ -58,10 +58,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Orde
                 String username = jwt.getSubject();
                 String[] roles = jwt.getClaim("roles").asArray(String.class);
                 String userId = jwt.getClaim("userId").asString();
+                String type = jwt.getClaim("type").asString();
                 var grantedAuthorityList = Stream.of(roles)
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
-                var authenticationToken = new JwtUsernamePasswordAuthenticationToken(userId, username, null, grantedAuthorityList);
+                var authenticationToken = new JwtUsernamePasswordAuthenticationToken(
+                        UserType.valueOf(type),
+                        userId, username, null, grantedAuthorityList);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
 //            if (Strings.isBlank(jwtTokenStr)) {
