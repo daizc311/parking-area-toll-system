@@ -1,7 +1,6 @@
 package run.bequick.dreamccc.pats.controller;
 
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.bequick.dreamccc.pats.api.PatsActionApi;
 import run.bequick.dreamccc.pats.common.DrResponse;

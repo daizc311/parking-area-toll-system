@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 public class ApiOutStorageParam {
 
     @NotEmpty
-    @Schema(name = "车牌号")
+    @Schema(description = "车牌号", required = true)
     private String numberPlate;
 
 }

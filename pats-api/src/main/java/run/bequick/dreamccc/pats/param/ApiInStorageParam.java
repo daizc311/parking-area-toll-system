@@ -8,25 +8,28 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
+@Schema(title = "入库所需的参数")
 public class ApiInStorageParam {
 
     @NotNull
+    @Schema(description = "入库时的车辆信息", required = true)
     private SimpleCarInfo carInfo;
 
     @NotNull
+    @Schema(description = "入库时的时间", required = true)
     private Date inStorageTime;
 
     @Data
     static class SimpleCarInfo {
 
         @NotEmpty
-        @Schema(name = "车牌号")
+        @Schema(description = "车牌号", required = true)
         private String numberPlate;
 
-        @Schema(name = "车辆型号")
+        @Schema(description = "车辆型号")
         private String modelName;
 
-        @Schema(name = "车辆颜色")
+        @Schema(description = "车辆颜色")
         private String color;
     }
 }

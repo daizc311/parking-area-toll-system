@@ -10,11 +10,11 @@ import java.math.BigDecimal;
 @Data
 public class ApiFeePaymentParam {
 
-    @Schema(name = "支付方式")
+    @Schema(description = "支付方式")
     private String method = "未知";
 
     @Min(value = 0)
     @NotNull
-    @Schema(name = "支付金额")
+    @Schema(description = "支付金额", required = true)
     private BigDecimal amount;
 }

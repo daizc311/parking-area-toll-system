@@ -1,5 +1,6 @@
 package run.bequick.dreamccc.pats.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +12,15 @@ import run.bequick.dreamccc.pats.param.ApiOutStorageParam;
 
 @RequestMapping("/api/action")
 public interface PatsActionApi {
+
     /**
      * <p>API入库接口</p>
-     * 外部
+     * 外部调用此接口以完成车辆入库登记
      *
      * @return DrResponse
      */
     @PostMapping("/inStorage")
+    @Schema(title="API入库接口")
     DrResponse<Object> inStorage(@Validated ApiInStorageParam param);
 
     /**
