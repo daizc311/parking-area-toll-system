@@ -46,7 +46,7 @@ public class CarParkingLogDO extends AbstractAuditable<AppUser, Long> {
     @Schema(name = "出/入库时间")
     private Date parkingDate;
 
-    private enum CarParkingType {
+    public enum CarParkingType {
         IN,OUT
     }
 }

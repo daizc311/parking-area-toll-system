@@ -7,4 +7,8 @@ import run.bequick.dreamccc.pats.domain.CarInfo;
 @Repository
 public interface CarInfoRepository extends JpaRepository<CarInfo,Long> {
 
+    CarInfo findCarInfoByNumberPlate(String numberPlate);
+
+    CarInfo findByNumberPlateLike(String numberPlate);
+
 }

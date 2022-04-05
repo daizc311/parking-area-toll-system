@@ -20,7 +20,7 @@ public class ApiInStorageParam {
     private Date inStorageTime;
 
     @Data
-    static class SimpleCarInfo {
+   public static class SimpleCarInfo {
 
         @NotEmpty
         @Schema(description = "车牌号", required = true)
