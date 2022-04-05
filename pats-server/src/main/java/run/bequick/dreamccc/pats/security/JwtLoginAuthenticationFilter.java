@@ -73,12 +73,12 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
         // 成功认证刷新Token
         log.info("签发Token");
         JwtUserDetail userDetail = (JwtUserDetail) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("HMAC256");
+        Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.SECRET);
         String accessToken = JWT.create()
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(accessTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("userType", "APP_USER")
+                .withClaim("userType", UserType.APP_USER.toString())
                 .withClaim("userId",userDetail.getUserId())
                 .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
@@ -86,7 +86,7 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(refreshTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("userType", "APP_USER")
+                .withClaim("userType",  UserType.APP_USER.toString())
                 .withClaim("userId",userDetail.getUserId())
                 .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);

@@ -19,6 +19,8 @@ import run.bequick.dreamccc.pats.domain.Customer;
 import run.bequick.dreamccc.pats.param.CustomerLoginParam;
 import run.bequick.dreamccc.pats.param.CustomerRegisterParam;
 import run.bequick.dreamccc.pats.param.ThreeFactor;
+import run.bequick.dreamccc.pats.security.SecurityConstant;
+import run.bequick.dreamccc.pats.security.UserType;
 import run.bequick.dreamccc.pats.service.data.CustomerDService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -73,14 +75,14 @@ public class CustomerController {
         DateTime dateTime = new DateTime();
         Calendar accessTokenTime = dateTime.toCalendar();
         accessTokenTime.add(Calendar.SECOND, 1800);
-        Algorithm algorithm = Algorithm.HMAC256("HMAC256");
+        Algorithm algorithm = Algorithm.HMAC256(SecurityConstant.SECRET);
         String accessToken = JWT.create()
                 .withSubject(customer.getRealName())
                 .withExpiresAt(accessTokenTime.getTime())
                 .withIssuer(httpServletRequest.getRequestURL().toString())
-                .withClaim("userType", "CUSTOMER")
+                .withClaim("userType", UserType.CUSTOMER.toString())
                 .withClaim("userId", customer.getId())
-                .withClaim("roles", Collections.singletonList("CUSTOMER"))
+                .withClaim("roles", Collections.singletonList(SecurityConstant.ROLE_CUSTOMER.getName()))
                 .sign(algorithm);
 
         return DrResponse.data(accessToken);
