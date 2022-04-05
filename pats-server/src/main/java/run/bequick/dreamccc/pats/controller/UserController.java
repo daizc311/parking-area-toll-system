@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import run.bequick.dreamccc.pats.domain.AppRole;
 import run.bequick.dreamccc.pats.domain.AppUser;
+import run.bequick.dreamccc.pats.param.LinkRole2UserParam;
 import run.bequick.dreamccc.pats.service.UserService;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping
 @RequiredArgsConstructor
 public class UserController {
 
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/role/link")
-    public ResponseEntity<?> linkRole2User(@Validated @RequestBody LinkRole2UserForm role2UserForm){
+    public ResponseEntity<?> linkRole2User(@Validated @RequestBody LinkRole2UserParam role2UserForm){
         userService.linkRole2User(role2UserForm.getRoleId(), role2UserForm.getUserId());
         return ResponseEntity.ok().build();
     }
