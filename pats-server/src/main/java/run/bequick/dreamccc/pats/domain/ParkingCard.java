@@ -5,10 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 
@@ -22,6 +19,14 @@ import java.math.BigDecimal;
 @Entity
 @NoArgsConstructor
 public class ParkingCard extends AbstractAuditable<AppUser,Long> {
+
+    @Schema(name = "[展示/绑定时用]停车卡号")
+    @Column(unique = true,nullable = false)
+    private String cardNo;
+
+    @Schema(name = "[绑定时用]停车卡密码")
+    @Column(nullable = false)
+    private String cardPwd;
 
     @Schema(name = "卡内余额")
     private BigDecimal amount;

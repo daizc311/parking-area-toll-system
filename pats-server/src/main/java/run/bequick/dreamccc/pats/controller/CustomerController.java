@@ -2,12 +2,15 @@ package run.bequick.dreamccc.pats.controller;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.text.StrFormatter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,13 +18,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.DrResponse;
+import run.bequick.dreamccc.pats.common.WhateverStringParam;
+import run.bequick.dreamccc.pats.domain.CarInfo;
 import run.bequick.dreamccc.pats.domain.Customer;
+import run.bequick.dreamccc.pats.domain.ParkingCard;
+import run.bequick.dreamccc.pats.param.BindParkingCardParam;
 import run.bequick.dreamccc.pats.param.CustomerLoginParam;
 import run.bequick.dreamccc.pats.param.CustomerRegisterParam;
 import run.bequick.dreamccc.pats.param.ThreeFactor;
 import run.bequick.dreamccc.pats.security.SecurityConstant;
+import run.bequick.dreamccc.pats.security.SecurityService;
 import run.bequick.dreamccc.pats.security.UserType;
 import run.bequick.dreamccc.pats.service.data.CustomerDService;
+import run.bequick.dreamccc.pats.service.data.ParkingCardDService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
@@ -37,6 +46,8 @@ public class CustomerController {
 
     private final RedisTemplate<String, ThreeFactor> verifyThreeFactorTemplate;
     private final CustomerDService customerDService;
+    private final ParkingCardDService parkingCardDService;
+    private final SecurityService securityService;
 
     @PostMapping("/free/registerThreeFactor")
     public DrResponse<String> registerThreeFactor(@RequestBody @Validated ThreeFactor threeFactor) {
@@ -86,5 +97,28 @@ public class CustomerController {
                 .sign(algorithm);
 
         return DrResponse.data(accessToken);
+    }
+
+
+    @PostMapping("/bindParkingCard")
+    public DrResponse<Customer> bindParkingCard(@RequestBody @Validated BindParkingCardParam param){
+
+        final Customer customer = securityService.getCurrentCustomer()
+                .orElseThrow(() -> new BusinessException(StrFormatter.format("未找到当前登录用户")));
+
+        final String cardNo = param.getCardNo().trim();
+        final String paramCardPwd = param.getCardPwd().trim();
+        Customer bind = customerDService.bindParkingCard(customer,cardNo,paramCardPwd);
+        return DrResponse.data(bind);
+    }
+
+    @PostMapping("/bindCarInfo")
+    public DrResponse<Customer> bindCarInfo(@RequestBody @Validated WhateverStringParam numberPlateParam){
+
+        final Customer customer = securityService.getCurrentCustomer()
+                .orElseThrow(() -> new BusinessException(StrFormatter.format("未找到当前登录用户")));
+
+        Customer bind = customerDService.bindCarInfo(customer,numberPlateParam.getValue());
+        return DrResponse.data(bind);
     }
 }
