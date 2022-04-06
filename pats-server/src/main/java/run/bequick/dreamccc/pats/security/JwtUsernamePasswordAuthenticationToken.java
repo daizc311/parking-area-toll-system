@@ -13,12 +13,19 @@ public class JwtUsernamePasswordAuthenticationToken extends UsernamePasswordAuth
     @Setter
     private String userId;
 
-    public JwtUsernamePasswordAuthenticationToken(Object principal, Object credentials) {
+    @Getter
+    @Setter
+    private UserType type;
+
+    public JwtUsernamePasswordAuthenticationToken(UserType type, Object principal, Object credentials) {
         super(principal, credentials);
+        this.type = type;
     }
 
-    public JwtUsernamePasswordAuthenticationToken(String userId, Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    public JwtUsernamePasswordAuthenticationToken(UserType type, String userId, Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(principal, credentials, authorities);
         this.userId = userId;
+        this.type = type;
     }
+
 }

@@ -1,5 +1,7 @@
 package run.bequick.dreamccc.pats;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +15,7 @@ import run.bequick.dreamccc.pats.service.UserService;
 import java.util.ArrayList;
 import java.util.Date;
 
-// https://www.youtube.com/watch?v=VVn9OG9nfH0
+@OpenAPIDefinition(security = {@SecurityRequirement(name = "token")})
 @SpringBootApplication
 public class ParkingAreaTollSystemApplication {
 
@@ -30,15 +32,15 @@ public class ParkingAreaTollSystemApplication {
 //    @Bean
 //    CommandLineRunner runner1(UserService userService) {
 //        return args -> {
-//            userService.saveRole(new AppRole(null, "ROLE_USER"));
-//            userService.saveRole(new AppRole(null, "ROLE_MANAGER"));
-//            userService.saveRole(new AppRole(null, "ROLE_ADMIN"));
-//            userService.saveRole(new AppRole(null, "ROLE_SUPER_ADMIN"));
+//            userService.saveRole(new AppRole("ROLE_USER"));
+//            userService.saveRole(new AppRole("ROLE_MANAGER"));
+//            userService.saveRole(new AppRole("ROLE_ADMIN"));
+//            userService.saveRole(new AppRole("ROLE_SUPER_ADMIN"));
 //
-//            userService.saveUser(new AppUser(null, "Alice", "alice", "dzc9669", "", new ArrayList<>(), new Date(), new Date()));
-//            userService.saveUser(new AppUser(null, "Bob", "bob", "dzc9669", "", new ArrayList<>(), new Date(), new Date()));
-//            userService.saveUser(new AppUser(null, "Cai", "cai", "dzc9669", "", new ArrayList<>(), new Date(), new Date()));
-//            userService.saveUser(new AppUser(null, "Daizc", "daizc", "dzc9669", "", new ArrayList<>(), new Date(), new Date()));
+//            userService.saveUser(new AppUser( "Alice", "alice", "dzc9669", "", new ArrayList<>()));
+//            userService.saveUser(new AppUser("Bob", "bob", "dzc9669", "", new ArrayList<>()));
+//            userService.saveUser(new AppUser("Cai", "cai", "dzc9669", "", new ArrayList<>()));
+//            userService.saveUser(new AppUser("Daizc", "daizc", "dzc9669", "", new ArrayList<>()));
 //
 //            userService.linkRole2UserWithName("ROLE_SUPER_ADMIN","Daizc");
 //            userService.linkRole2UserWithName("ROLE_ADMIN","Cai");

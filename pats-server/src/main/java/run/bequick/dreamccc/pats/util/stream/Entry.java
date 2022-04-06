@@ -1,4 +1,4 @@
-package run.bequick.dreamccc.pats.common.stream;
+package run.bequick.dreamccc.pats.util.stream;
 
 import lombok.Data;
 

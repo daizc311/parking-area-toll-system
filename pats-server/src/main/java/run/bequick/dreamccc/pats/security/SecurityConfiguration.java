@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -38,16 +39,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        var authenticationFilter = new JwtLoginAuthenticationFilter(authenticationManager(),objectMapper);
+        var authenticationFilter = new JwtLoginAuthenticationFilter(authenticationManager(), objectMapper);
         authenticationFilter.setFilterProcessesUrl(SecurityConstant.LOGIN_PATH);
 
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/customer/free/**")).permitAll()
+                .and()
                 .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .addFilter(authenticationFilter);
+                .addFilter(authenticationFilter)
+                .addFilterBefore(new JwtAuthorizationFilter(objectMapper), LogoutFilter.class);
+
     }
 
     @Override
@@ -55,4 +60,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
 }
