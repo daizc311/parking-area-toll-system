@@ -1,8 +1,12 @@
 package run.bequick.dreamccc.pats.service.data;
 
+import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
+import run.bequick.dreamccc.pats.domain.CarParkingStatus;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
+import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 public interface ParkingCardDService {
@@ -11,7 +15,9 @@ public interface ParkingCardDService {
 
     Optional<ParkingCard> getByCardNo(String cardNo);
 
-    ParkingCard pay(ParkingCard parkingCard, BigDecimal amount);
+    List<ParkingCardAmountLogDO> listPayLogByCarPackingStatus(CarParkingStatus carParkingStatus);
 
-    ParkingCard recharge(ParkingCard parkingCard, BigDecimal amount);
+    ParkingCard pay(CarParkingStatus carParkingStatus, ParkingCard parkingCard, BigDecimal amount);
+
+    ParkingCard recharge(Long orderId, ParkingCard parkingCard, BigDecimal amount);
 }

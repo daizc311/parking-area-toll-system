@@ -32,6 +32,9 @@ public class ParkingCardAmountLogDO extends AbstractAuditable<AppUser,Long> {
     @Schema(name = "停车卡ID")
     private Long cardId;
 
+    @Schema(name = "变动事件Id:充值时为订单Id,消费时为停车记录Id")
+    private Long changeEventId;
+
     @Schema(name = "变动前余额")
     private BigDecimal beforeAmount;
 

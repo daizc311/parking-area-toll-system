@@ -1,12 +1,12 @@
 package run.bequick.dreamccc.pats.service.data;
 
 import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
-import run.bequick.dreamccc.pats.domain.CarParkingStatus;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface ParkingCardAmountLogDODService {
 
@@ -20,6 +20,8 @@ public interface ParkingCardAmountLogDODService {
      * @param result   最终金额
      */
     @Transactional
-    void addAmountLog(ParkingCardAmountLogDO.AmountChangeType type, ParkingCard card,
-                      BigDecimal original, BigDecimal amount, BigDecimal result);
+    void addAmountLog(ParkingCardAmountLogDO.AmountChangeType type, ParkingCard card,Long changeEventId,
+                      BigDecimal after, BigDecimal change, BigDecimal before);
+
+    List<ParkingCardAmountLogDO> listByCarPackingStatusId(Long id);
 }

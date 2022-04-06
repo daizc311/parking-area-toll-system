@@ -10,16 +10,12 @@ import org.jasypt.util.password.PasswordEncryptor;
 import org.springframework.stereotype.Service;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.ServiceLog;
-import run.bequick.dreamccc.pats.domain.CarInfo;
-import run.bequick.dreamccc.pats.domain.Customer;
-import run.bequick.dreamccc.pats.domain.ParkingCard;
+import run.bequick.dreamccc.pats.domain.*;
 import run.bequick.dreamccc.pats.param.ThreeFactor;
 import run.bequick.dreamccc.pats.repository.CustomerRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -90,6 +86,24 @@ public class CustomerDServiceImpl implements CustomerDService {
         }
         customer.getCarInfos().add(carInfo);
         return repository.save(customer);
+    }
+
+//    @Override
+    @ServiceLog
+    public ParkingCard payToParkingStatus(CarParkingStatus carParkingStatus,ParkingCard parkingCard){
+
+        // 已支付金额
+        final BigDecimal paidAmount = parkingCardService.listPayLogByCarPackingStatus(carParkingStatus).stream()
+                .map(ParkingCardAmountLogDO::getChangeAmount)
+                .reduce(BigDecimal::add)
+                .orElse(new BigDecimal(0));
+        //
+
+        final long timeDifference = new Date().getTime() - carParkingStatus.getInStorageDate().getTime();
+
+
+
+        return parkingCardService.pay(carParkingStatus, parkingCard, );
     }
 
 
