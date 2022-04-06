@@ -35,13 +35,16 @@ public class ParkingCardAmountLogDO extends AbstractAuditable<AppUser,Long> {
     @Schema(name = "变动前余额")
     private BigDecimal beforeAmount;
 
+    @Schema(name = "变动金额")
+    private BigDecimal changeAmount;
+
     @Schema(name = "变动类型：充值/消费")
     private AmountChangeType type;
 
     @Schema(name = "变动后余额")
     private BigDecimal afterAmount;
 
-    enum AmountChangeType {
+    public enum AmountChangeType {
         /**
          * 充值
          */
