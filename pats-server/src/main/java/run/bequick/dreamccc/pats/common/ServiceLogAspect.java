@@ -4,6 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint;
@@ -27,8 +28,8 @@ import java.util.Objects;
 @Component
 public class ServiceLogAspect {
 
-    private final static Logger defaultLogger = LoggerFactory.getLogger("ServiceLog");
     public static final String POS = "{pos}";
+    private final static Logger defaultLogger = LoggerFactory.getLogger("ServiceLog");
     private static final Map<String, SpelExpression> SPEL_CACHE = new HashMap<>();
     private static final Map<Class<?>, Logger> LOGGER_CACHE = new HashMap<>();
 
@@ -42,15 +43,15 @@ public class ServiceLogAspect {
         var targetArgs = point.getArgs();
 
 
-        var signature = point.getSignature();
-        var targetMethodName = signature.getName();
-        var targetClazz = signature.getDeclaringType();
-        var targetInstance = point.getTarget();
-        Class<?>[] classes = Arrays.stream(targetArgs).map(Object::getClass).toArray(Class[]::new);
+        final var signature = ((MethodSignature) point.getSignature());
+        final var targetMethodName = signature.getName();
+        final var targetClazz = signature.getDeclaringType();
+        final var targetInstance = point.getTarget();
+        final var targetMethod = signature.getMethod();
 
         Logger logger = this.getLogger(serviceLog);
         String logFormat = this.getLogFormat(serviceLog, signature);
-        String[] logParams = this.getLogParams(serviceLog, targetClazz.getMethod(targetMethodName, classes), targetInstance, targetArgs);
+        String[] logParams = this.getLogParams(serviceLog, targetMethod, targetInstance, targetArgs);
 
         try {
             this.logInfo(logger, "开始", logFormat, logParams);

@@ -11,7 +11,7 @@ public class JwtUsernamePasswordAuthenticationToken extends UsernamePasswordAuth
 
     @Getter
     @Setter
-    private String userId;
+    private Long userId;
 
     @Getter
     @Setter
@@ -22,7 +22,7 @@ public class JwtUsernamePasswordAuthenticationToken extends UsernamePasswordAuth
         this.type = type;
     }
 
-    public JwtUsernamePasswordAuthenticationToken(UserType type, String userId, Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    public JwtUsernamePasswordAuthenticationToken(UserType type, Long userId, Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(principal, credentials, authorities);
         this.userId = userId;
         this.type = type;

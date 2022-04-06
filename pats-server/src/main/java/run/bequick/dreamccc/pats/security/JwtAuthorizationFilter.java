@@ -57,8 +57,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Orde
                 DecodedJWT jwt = jwtVerifier.verify(jwtTokenStr);
                 String username = jwt.getSubject();
                 String[] roles = jwt.getClaim("roles").asArray(String.class);
-                String userId = jwt.getClaim("userId").asString();
-                String type = jwt.getClaim("type").asString();
+                Long userId = jwt.getClaim("userId").asLong();
+                String type = jwt.getClaim("userType").asString();
                 var grantedAuthorityList = Stream.of(roles)
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());

@@ -41,8 +41,7 @@ public class SecurityService {
 
         return getAuthentication().filter(token -> Objects.equals(token.getType(), UserType.CUSTOMER))
                 .map(JwtUsernamePasswordAuthenticationToken::getUserId)
-                .map(Long::parseLong)
-                .map(userId -> customerRepository.getById(userId));
+                .map(customerRepository::getById);
     }
 
     /**
@@ -54,8 +53,7 @@ public class SecurityService {
 
         return getAuthentication().filter(token -> Objects.equals(token.getType(), UserType.APP_USER))
                 .map(JwtUsernamePasswordAuthenticationToken::getUserId)
-                .map(Long::parseLong)
-                .map(userId -> appUserRepository.getById(userId));
+                .map(appUserRepository::getById);
     }
 
 }
