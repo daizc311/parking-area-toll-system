@@ -10,22 +10,23 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Data
 @Table(name = "parking_setting")
 @Entity
 @NoArgsConstructor
-public class ParkingSetting extends AbstractAuditable<AppUser,Long> {
+public class ParkingSetting extends AbstractAuditable<AppUser,String> {
 
     @Schema(name = "计费周期(秒)")
     @Column(nullable = false)
-    @NotEmpty
+    @NotNull
     private Long billingCycle;
 
     @Schema(name = "计费金额(精确到小数后两位)")
     @Column(nullable = false,precision = 2)
-    @NotEmpty
+    @NotNull
     private BigDecimal billingAmount;
 
     @Schema(name = "车位总数")

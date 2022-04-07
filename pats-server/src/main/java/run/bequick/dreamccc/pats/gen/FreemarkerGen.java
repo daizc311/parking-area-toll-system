@@ -20,7 +20,8 @@ import java.util.function.Function;
 @Log4j2
 public class FreemarkerGen {
 
-    public final static String BASE_PROJECT_PATH = "D:\\IdeaProjects\\demo\\pats-server\\";
+    public final static String BASE_PROJECT_PATH_2 = "D:\\IdeaProjects\\demo\\pats-server\\";
+    public final static String BASE_PROJECT_PATH = "D:\\Git_Project\\parking-area-toll-system\\pats-server\\";
     public static final String BASE_PROJECT_PACKAGE = "run.bequick.dreamccc.pats";
     public static final String JAVA_SRC_PATH = "src\\main\\java\\";
     public static final String KOTLIN_SRC_PATH = "src\\main\\kotlin\\";
@@ -42,12 +43,13 @@ public class FreemarkerGen {
                 configuration.getTemplate("DServiceImpl.ftl"),
         };
         Class<?>[] classes = {
-                ParkingCard.class,
-                ParkingCardAmountLogDO.class,
-                Customer.class,
-                CarInfo.class,
-                CarParkingLogDO.class,
-                CarParkingStatus.class
+                ParkingSetting.class
+//                ParkingCard.class,
+//                ParkingCardAmountLogDO.class,
+//                Customer.class,
+//                CarInfo.class,
+//                CarParkingLogDO.class,
+//                CarParkingStatus.class
         };
         for (Class<?> aClass : classes) {
             String entityPackage = aClass.getPackageName();

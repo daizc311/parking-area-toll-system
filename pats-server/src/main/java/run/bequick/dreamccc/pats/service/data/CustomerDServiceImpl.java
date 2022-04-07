@@ -103,7 +103,7 @@ public class CustomerDServiceImpl implements CustomerDService {
 
 
 
-        return parkingCardService.pay(carParkingStatus, parkingCard, );
+        return parkingCardService.pay(carParkingStatus, parkingCard, paidAmount);
     }
 
 
