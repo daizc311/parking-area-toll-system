@@ -49,7 +49,7 @@ public class ServiceLogAspect {
         final var targetInstance = point.getTarget();
         final var targetMethod = signature.getMethod();
 
-        Logger logger = this.getLogger(serviceLog);
+        Logger logger = this.getLogger(serviceLog, targetClazz);
         String logFormat = this.getLogFormat(serviceLog, signature);
         String[] logParams = this.getLogParams(serviceLog, targetMethod, targetInstance, targetArgs);
 
@@ -83,7 +83,7 @@ public class ServiceLogAspect {
 
     public void logInfo(Logger logger, String pos, String format, String[] params) {
 
-        logger.info(format.replace(POS, pos), params);
+        logger.info(format.replace(POS, pos), (Object[]) params);
     }
 
     public String getLogFormat(ServiceLog serviceLog, Signature signature) {
@@ -94,9 +94,10 @@ public class ServiceLogAspect {
         return logFormat;
     }
 
-    public Logger getLogger(ServiceLog serviceLog) {
+    public Logger getLogger(ServiceLog serviceLog, Class<?> targetClazz) {
 
-        return LOGGER_CACHE.computeIfAbsent(serviceLog.loggingClass(), LoggerFactory::getLogger);
+        Class<?> loggingClass = serviceLog.loggingClass() == ServiceLog.class ? targetClazz : serviceLog.loggingClass();
+        return LOGGER_CACHE.computeIfAbsent(loggingClass, LoggerFactory::getLogger);
     }
 
 
