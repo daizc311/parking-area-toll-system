@@ -22,19 +22,19 @@ import javax.validation.constraints.NotNull;
 @EntityListeners(AuditingEntityListener.class)
 public class CarInfo extends AbstractAuditable<AppUser, Long> {
 
-    @Schema(name = "与车辆关联的客户信息")
+    @Schema(description = "与车辆关联的客户信息")
     @ManyToOne
     @JoinColumn(name = "customer_id",referencedColumnName = "id")
     private Customer customer;
 
-    @Schema(name = "车牌号")
-    @Column(unique = true,nullable = false)
+    @Schema(description = "车牌号")
+    @Column(unique = true, nullable = false)
     @NotNull(message = "车牌号不能为空")
     private String numberPlate;
 
-    @Schema(name = "车辆型号")
+    @Schema(description = "车辆型号")
     private String modelName;
 
-    @Schema(name = "车辆颜色")
+    @Schema(description = "车辆颜色")
     private String color;
 }

@@ -23,9 +23,9 @@ public class CarParkingStatus extends AbstractAuditable<AppUser, Long> {
 
     @OneToOne
     @JoinColumn(name = "car_info_id", referencedColumnName = "id")
-    @Schema(name = "车辆信息")
+    @Schema(description = "车辆信息")
     private CarInfo carInfo;
 
-    @Schema(name = "车辆入库时间")
+    @Schema(description = "车辆入库时间")
     private Date inStorageDate;
 }

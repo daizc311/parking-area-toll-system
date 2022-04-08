@@ -24,26 +24,26 @@ import java.math.BigDecimal;
 @EntityListeners(AuditingEntityListener.class)
 public class ParkingCard extends AbstractAuditable<AppUser,Long> {
 
-    @Schema(name = "[展示/绑定时用]停车卡号")
-    @Column(unique = true,nullable = false)
+    @Schema(description = "[展示/绑定时用]停车卡号")
+    @Column(unique = true, nullable = false)
     @NotEmpty
     private String cardNo;
 
-    @Schema(name = "[绑定时用]停车卡密码")
+    @Schema(description = "[绑定时用]停车卡密码")
     @Column(nullable = false)
     @NotEmpty
     private String cardPwd;
 
-    @Schema(name = "停车卡类型")
+    @Schema(description = "停车卡类型")
     @Column(nullable = false)
     @NotEmpty
     private ParkingCardTypeEnum type;
 
-    @Schema(name = "卡内余额")
+    @Schema(description = "卡内余额")
     @NotEmpty
     private BigDecimal amount;
 
-    @Schema(name = "与停车卡关联的客户信息")
+    @Schema(description = "与停车卡关联的客户信息")
     @ManyToOne
     @JoinColumn(name = "customer_id",referencedColumnName = "id")
     private Customer customer;

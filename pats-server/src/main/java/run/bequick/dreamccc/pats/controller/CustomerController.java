@@ -5,6 +5,7 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.text.StrFormatter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -46,6 +47,7 @@ public class CustomerController {
     private final ParkingCardDService parkingCardDService;
     private final SecurityService securityService;
 
+    @Operation(summary = "客户注册三要素验证", tags = {"客户"})
     @PostMapping("/free/registerThreeFactor")
     public DrResponse<String> registerThreeFactor(@RequestBody @Validated ThreeFactor threeFactor) {
 
@@ -58,6 +60,7 @@ public class CustomerController {
         return DrResponse.data(key);
     }
 
+    @Operation(summary = "客户注册", tags = {"客户"})
     @PostMapping("/free/register")
     public DrResponse<Customer> register(@RequestBody @Validated CustomerRegisterParam customerRegisterParam) {
 
@@ -73,6 +76,7 @@ public class CustomerController {
         return DrResponse.data(customer);
     }
 
+    @Operation(summary = "客户登录", tags = {"客户", "登录"})
     @PostMapping("/free/login")
     public DrResponse<String> login(@RequestBody @Validated CustomerLoginParam customerLoginParam, HttpServletRequest httpServletRequest) {
 
@@ -97,25 +101,27 @@ public class CustomerController {
     }
 
 
+    @Operation(summary = "客户绑定停车卡", tags = {"客户", "停车卡"})
     @PostMapping("/bindParkingCard")
-    public DrResponse<Customer> bindParkingCard(@RequestBody @Validated BindParkingCardParam param){
+    public DrResponse<Customer> bindParkingCard(@RequestBody @Validated BindParkingCardParam param) {
 
         final Customer customer = securityService.getCurrentCustomer()
                 .orElseThrow(() -> new BusinessException(StrFormatter.format("未找到当前登录用户")));
 
         final String cardNo = param.getCardNo().trim();
         final String paramCardPwd = param.getCardPwd().trim();
-        Customer bind = customerDService.bindParkingCard(customer,cardNo,paramCardPwd);
+        Customer bind = customerDService.bindParkingCard(customer, cardNo, paramCardPwd);
         return DrResponse.data(bind);
     }
 
+    @Operation(summary = "客户绑定车辆", tags = {"客户", "车辆信息"})
     @PostMapping("/bindCarInfo")
-    public DrResponse<Customer> bindCarInfo(@RequestBody @Validated WhateverStringParam numberPlateParam){
+    public DrResponse<Customer> bindCarInfo(@RequestBody @Validated WhateverStringParam numberPlateParam) {
 
         final Customer customer = securityService.getCurrentCustomer()
                 .orElseThrow(() -> new BusinessException(StrFormatter.format("未找到当前登录用户")));
 
-        Customer bind = customerDService.bindCarInfo(customer,numberPlateParam.getValue());
+        Customer bind = customerDService.bindCarInfo(customer, numberPlateParam.getValue());
         return DrResponse.data(bind);
     }
 }

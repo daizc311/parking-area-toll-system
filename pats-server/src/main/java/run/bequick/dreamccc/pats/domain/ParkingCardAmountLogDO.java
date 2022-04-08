@@ -28,25 +28,25 @@ import java.math.BigDecimal;
 @EntityListeners(AuditingEntityListener.class)
 public class ParkingCardAmountLogDO extends AbstractAuditable<AppUser,Long> {
 
-    @Schema(name = "用户ID")
+    @Schema(description = "用户ID")
     private Long userId;
 
-    @Schema(name = "停车卡ID")
+    @Schema(description = "停车卡ID")
     private Long cardId;
 
-    @Schema(name = "变动事件Id:充值时为订单Id,消费时为停车记录Id")
+    @Schema(description = "变动事件Id:充值时为订单Id,消费时为停车记录Id")
     private Long changeEventId;
 
-    @Schema(name = "变动前余额")
+    @Schema(description = "变动前余额")
     private BigDecimal beforeAmount;
 
-    @Schema(name = "变动金额")
+    @Schema(description = "变动金额")
     private BigDecimal changeAmount;
 
-    @Schema(name = "变动类型：充值/消费")
+    @Schema(description = "变动类型：充值/消费")
     private AmountChangeType type;
 
-    @Schema(name = "变动后余额")
+    @Schema(description = "变动后余额")
     private BigDecimal afterAmount;
 
     public enum AmountChangeType {

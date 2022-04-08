@@ -1,5 +1,6 @@
 package run.bequick.dreamccc.pats.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import run.bequick.dreamccc.pats.service.UserService;
 
 @Slf4j
 @RestController
-@RequestMapping()
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -36,8 +37,9 @@ public class UserController {
 //        return DrResponse.data(userService.saveRole(role));
 //    }
 
-    @PostMapping("/role/link")
-    public ResponseEntity<?> linkRole2User(@Validated @RequestBody LinkRole2UserParam role2UserForm) {
+    @Operation(summary = "用户关联权限", tags = {"系统用户", "系统权限"})
+    @PostMapping("/link/role")
+    public ResponseEntity<?> userLinkRole(@Validated @RequestBody LinkRole2UserParam role2UserForm) {
         userService.linkRole2User(role2UserForm.getRole(), role2UserForm.getUserId());
         return ResponseEntity.ok().build();
     }

@@ -2,14 +2,13 @@ package run.bequick.dreamccc.pats.param;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Data
-@Schema(title = "入库所需的参数")
+@Schema(description = "入库所需的参数")
 public class ApiInStorageParam {
 
     @NotNull

@@ -23,32 +23,32 @@ public class ParkingSetting {
     @Id
     private String id;
 
-    @Schema(name = "系统名称", description = "会展示在登录页和title上")
+    @Schema(description = "系统名称,会展示在登录页和title上")
     @Column(nullable = false)
     @NotEmpty
     private String systemName;
 
-    @Schema(name = "计费周期(秒)", minimum = "60", maximum = "86400")
+    @Schema(description = "计费周期(秒)", minimum = "60", maximum = "86400")
     @Column(nullable = false)
     @NotNull
     @Min(60)
     @Max(86400)
     private Long billingCycle;
 
-    @Schema(name = "计费金额(精确到小数后两位)", minimum = "0", maximum = "1000")
+    @Schema(description = "计费金额(精确到小数后两位)", minimum = "0", maximum = "1000")
     @Column(nullable = false, precision = 2)
     @NotNull
     @Min(0)
     @Max(1000)
     private BigDecimal billingAmount;
 
-    @Schema(name = "车位总数")
+    @Schema(description = "车位总数")
     @Column(nullable = false)
     @NotNull
     @Min(1)
     private Integer parkingSpacesTotal;
 
-    @Schema(name = "首个计费周期是否计费")
+    @Schema(description = "首个计费周期是否计费")
     @Column(nullable = false)
     @NotNull
     private Boolean firstCycleCanBilling;

@@ -25,29 +25,29 @@ import java.util.Date;
 @EntityListeners(AuditingEntityListener.class)
 public class CarParkingLogDO extends AbstractAuditable<AppUser, Long> {
 
-    @Schema(name = "[客户信息]Id")
+    @Schema(description = "[客户信息]Id")
     private Long customerId;
 
-    @Schema(name = "[客户信息]真实姓名")
+    @Schema(description = "[客户信息]真实姓名")
     private String customerRealName;
 
-    @Schema(name = "[车辆信息]Id")
+    @Schema(description = "[车辆信息]Id")
     private Long carId;
 
-    @Schema(name = "[车辆信息]车牌号")
+    @Schema(description = "[车辆信息]车牌号")
     private String carNumberPlate;
 
-    @Schema(name = "[车辆信息]车辆型号")
+    @Schema(description = "[车辆信息]车辆型号")
     private String carModelName;
 
-    @Schema(name = "[在库状态]Id")
+    @Schema(description = "[在库状态]Id")
     @Column(nullable = false)
     private Long statusId;
 
-    @Schema(name = "出/入库类型")
+    @Schema(description = "出/入库类型")
     private CarParkingType type;
 
-    @Schema(name = "出/入库时间")
+    @Schema(description = "出/入库时间")
     private Date parkingDate;
 
     public enum CarParkingType {
