@@ -23,7 +23,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Customer extends AbstractAuditable<AppUser,Long> implements LoginAble {
+public class Customer extends AbstractAuditable<AppUser, Long> {
 
     @Schema(name = "[三要素之一]真实姓名")
     @Column(nullable = false)

@@ -17,7 +17,7 @@ import java.util.HashSet;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class AppUser extends AbstractAuditable<AppUser, Long> implements LoginAble {
+public class AppUser extends AbstractAuditable<AppUser, Long> {
 
 
     @Column(nullable = false)
@@ -29,10 +29,6 @@ public class AppUser extends AbstractAuditable<AppUser, Long> implements LoginAb
     @JsonIgnore
     @Column(nullable = false)
     private String password;
-
-//    @JsonIgnore
-//    @Column(nullable = false)
-//    private String salt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<AppRole> roles = new HashSet<>();
