@@ -18,13 +18,13 @@ import run.bequick.dreamccc.pats.service.data.ParkingSettingDService;
 public class SettingController {
     private final ParkingSettingDService parkingSettingDService;
 
-    @Operation(summary = "获取系统设置", tags = {"系统设置"})
+    @Operation(summary = "获取系统设置", tags = {"Setting"})
     @PostMapping("/getSetting")
     public DrResponse<ParkingSetting> getSetting() {
         return DrResponse.data(parkingSettingDService.getSetting());
     }
 
-    @Operation(summary = "保存系统设置", tags = {"系统设置"})
+    @Operation(summary = "保存系统设置", tags = {"Setting"})
     @PostMapping("/saveSetting")
     public DrResponse<ParkingSetting> saveSetting(@RequestBody ParkingSetting parkingSetting) {
         return DrResponse.data(parkingSettingDService.saveSetting(parkingSetting));

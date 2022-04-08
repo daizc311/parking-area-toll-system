@@ -47,7 +47,7 @@ public class CustomerController {
     private final ParkingCardDService parkingCardDService;
     private final SecurityService securityService;
 
-    @Operation(summary = "客户注册三要素验证", tags = {"客户"})
+    @Operation(summary = "客户注册三要素验证", tags = {"Customer"})
     @PostMapping("/free/registerThreeFactor")
     public DrResponse<String> registerThreeFactor(@RequestBody @Validated ThreeFactor threeFactor) {
 
@@ -60,7 +60,7 @@ public class CustomerController {
         return DrResponse.data(key);
     }
 
-    @Operation(summary = "客户注册", tags = {"客户"})
+    @Operation(summary = "客户注册", tags = {"Customer"})
     @PostMapping("/free/register")
     public DrResponse<Customer> register(@RequestBody @Validated CustomerRegisterParam customerRegisterParam) {
 
@@ -76,7 +76,7 @@ public class CustomerController {
         return DrResponse.data(customer);
     }
 
-    @Operation(summary = "客户登录", tags = {"客户", "登录"})
+    @Operation(summary = "客户登录", tags = {"Customer", "Login"})
     @PostMapping("/free/login")
     public DrResponse<String> login(@RequestBody @Validated CustomerLoginParam customerLoginParam, HttpServletRequest httpServletRequest) {
 
@@ -101,7 +101,7 @@ public class CustomerController {
     }
 
 
-    @Operation(summary = "客户绑定停车卡", tags = {"客户", "停车卡"})
+    @Operation(summary = "客户绑定停车卡", tags = {"Customer", "ParkingCard"})
     @PostMapping("/bindParkingCard")
     public DrResponse<Customer> bindParkingCard(@RequestBody @Validated BindParkingCardParam param) {
 
@@ -114,7 +114,7 @@ public class CustomerController {
         return DrResponse.data(bind);
     }
 
-    @Operation(summary = "客户绑定车辆", tags = {"客户", "车辆信息"})
+    @Operation(summary = "客户绑定车辆", tags = {"Customer", "CarInfo"})
     @PostMapping("/bindCarInfo")
     public DrResponse<Customer> bindCarInfo(@RequestBody @Validated WhateverStringParam numberPlateParam) {
 

@@ -20,7 +20,7 @@ import run.bequick.dreamccc.pats.security.SecurityConstant;
 @RequiredArgsConstructor
 public class FakedLoginController {
 
-    @Operation(summary = "后台登录", tags = {"登录"})
+    @Operation(summary = "后台登录", tags = {"Login"})
     @GetMapping(value = SecurityConstant.LOGIN_PATH)
     public JwtLoginAuthenticationFilter.TokenResponse login(@RequestParam String username, @RequestParam String password) {
         return null;

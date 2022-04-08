@@ -37,7 +37,7 @@ public class UserController {
 //        return DrResponse.data(userService.saveRole(role));
 //    }
 
-    @Operation(summary = "用户关联权限", tags = {"系统用户", "系统权限"})
+    @Operation(summary = "用户关联权限", tags = {"AppUser", "AppRole"})
     @PostMapping("/link/role")
     public ResponseEntity<?> userLinkRole(@Validated @RequestBody LinkRole2UserParam role2UserForm) {
         userService.linkRole2User(role2UserForm.getRole(), role2UserForm.getUserId());
