@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.DrResponse;
 import run.bequick.dreamccc.pats.common.WhateverStringParam;
-import run.bequick.dreamccc.pats.domain.CarInfo;
 import run.bequick.dreamccc.pats.domain.Customer;
-import run.bequick.dreamccc.pats.domain.ParkingCard;
+import run.bequick.dreamccc.pats.enums.AppRoleEnum;
 import run.bequick.dreamccc.pats.param.BindParkingCardParam;
 import run.bequick.dreamccc.pats.param.CustomerLoginParam;
 import run.bequick.dreamccc.pats.param.CustomerRegisterParam;
@@ -93,7 +90,7 @@ public class CustomerController {
                 .withIssuer(httpServletRequest.getRequestURL().toString())
                 .withClaim("userType", UserType.CUSTOMER.toString())
                 .withClaim("userId", customer.getId())
-                .withClaim("roles", Collections.singletonList(SecurityConstant.ROLE_CUSTOMER.getName()))
+                .withClaim("roles", Collections.singletonList(AppRoleEnum.CUSTOMER.toString()))
                 .sign(algorithm);
 
         return DrResponse.data(accessToken);

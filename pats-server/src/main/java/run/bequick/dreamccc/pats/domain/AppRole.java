@@ -1,22 +1,30 @@
 package run.bequick.dreamccc.pats.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.AbstractAuditable;
 
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Data
+
 @Table(name = "app_role")
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
-public class AppRole extends AbstractAuditable<AppUser, Long> {
+public class AppRole {
 
+    @Id
+    @Getter
+    private String id;
+
+    @Getter
     @Column(unique = true, nullable = false)
-    private String name;
+    private String description;
+
+    public AppRole(String id, String description) {
+//        super.setId(id);
+        this.id = id;
+        this.description = description;
+    }
 }

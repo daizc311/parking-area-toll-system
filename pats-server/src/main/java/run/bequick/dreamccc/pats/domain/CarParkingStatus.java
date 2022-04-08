@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractAuditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Table(name = "car_parking_status", indexes = {})
 @Entity
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class CarParkingStatus extends AbstractAuditable<AppUser, Long> {
 
     @OneToOne

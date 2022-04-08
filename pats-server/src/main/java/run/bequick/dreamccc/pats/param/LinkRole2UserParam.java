@@ -8,6 +8,6 @@ import javax.validation.constraints.NotBlank;
 public class LinkRole2UserParam {
     @NotBlank(message = "用户ID不能为空")
     private Long userId;
-    @NotBlank(message = "角色ID不能为空")
-    private Long roleId;
+    @NotBlank(message = "角色不能为空")
+    private String role;
 }

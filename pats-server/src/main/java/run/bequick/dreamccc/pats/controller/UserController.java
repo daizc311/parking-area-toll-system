@@ -4,47 +4,41 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import run.bequick.dreamccc.pats.domain.AppRole;
-import run.bequick.dreamccc.pats.domain.AppUser;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import run.bequick.dreamccc.pats.param.LinkRole2UserParam;
 import run.bequick.dreamccc.pats.service.UserService;
 
-import java.net.URI;
-import java.util.List;
-
 @Slf4j
 @RestController
-@RequestMapping
+@RequestMapping()
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
 
-
-    @GetMapping("/user")
-    public ResponseEntity<List<AppUser>> allUsers(){
-
-        return ResponseEntity.ok(userService.getUsers());
-    }
-
-    @PutMapping("/user")
-    public ResponseEntity<AppUser> saveUser(@Validated @RequestBody AppUser user){
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
-    }
-
-    @PutMapping("/role")
-    public ResponseEntity<AppRole> saveRole(@Validated @RequestBody AppRole role){
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
-    }
+//    @RequestMapping(value = "/listAll",method = {RequestMethod.GET,RequestMethod.POST})
+//    public DrResponse<List<AppUser>> listAll(){
+//
+//        return DrResponse.data(userService.getUsers());
+//    }
+//
+//    @RequestMapping(value = "/save",method = {RequestMethod.PUT,RequestMethod.POST})
+//    public DrResponse<AppUser> save(@Validated @RequestBody AppUser user){
+//        return DrResponse.data(userService.saveUser(user));
+//    }
+//
+//    @PutMapping("/role")
+//    public ResponseEntity<AppRole> saveRole(@Validated @RequestBody AppRole role){
+//        return DrResponse.data(userService.saveRole(role));
+//    }
 
     @PostMapping("/role/link")
-    public ResponseEntity<?> linkRole2User(@Validated @RequestBody LinkRole2UserParam role2UserForm){
-        userService.linkRole2User(role2UserForm.getRoleId(), role2UserForm.getUserId());
+    public ResponseEntity<?> linkRole2User(@Validated @RequestBody LinkRole2UserParam role2UserForm) {
+        userService.linkRole2User(role2UserForm.getRole(), role2UserForm.getUserId());
         return ResponseEntity.ok().build();
     }
 

@@ -9,7 +9,6 @@ import run.bequick.dreamccc.pats.domain.ParkingSetting;
 import run.bequick.dreamccc.pats.repository.CarParkingStatusRepository;
 import run.bequick.dreamccc.pats.repository.ParkingSettingRepository;
 
-import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 
 @Service
@@ -40,20 +39,20 @@ public class ParkingSettingDServiceImpl implements ParkingSettingDService {
     @Override
     @ServiceLog("初始化系统设置 - {pos}")
     public ParkingSetting init() {
-        try {
-            return repository.getById(SETTING_ID);
-        } catch (EntityNotFoundException enfe) {
-            final ParkingSetting parkingSetting = new ParkingSetting();
-            parkingSetting.setId("PATS");
-            // 默认车位总数
-            parkingSetting.setParkingSpacesTotal(100);
-            // 默认首个周期计费
-            parkingSetting.setFirstCycleCanBilling(true);
-            // 默认 30分钟  2元
-            parkingSetting.setBillingCycle(30L);
-            parkingSetting.setBillingAmount(BigDecimal.valueOf(200L, 2));
-            repository.save(parkingSetting);
-            return parkingSetting;
-        }
+        return repository.findById(SETTING_ID)
+                .orElseGet(() -> {
+                    final ParkingSetting parkingSetting = new ParkingSetting();
+                    parkingSetting.setId("PATS");
+                    parkingSetting.setSystemName("停车场收费系统");
+                    // 默认车位总数
+                    parkingSetting.setParkingSpacesTotal(100);
+                    // 默认首个周期计费
+                    parkingSetting.setFirstCycleCanBilling(true);
+                    // 默认 30分钟  2元
+                    parkingSetting.setBillingCycle(1800L);
+                    parkingSetting.setBillingAmount(BigDecimal.valueOf(200L, 2));
+                    repository.save(parkingSetting);
+                    return parkingSetting;
+                });
     }
 }

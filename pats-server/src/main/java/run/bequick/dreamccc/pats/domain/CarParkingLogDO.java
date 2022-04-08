@@ -3,10 +3,13 @@ package run.bequick.dreamccc.pats.domain;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.AbstractAuditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -19,6 +22,7 @@ import java.util.Date;
 })
 @Entity
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class CarParkingLogDO extends AbstractAuditable<AppUser, Long> {
 
     @Schema(name = "[客户信息]Id")

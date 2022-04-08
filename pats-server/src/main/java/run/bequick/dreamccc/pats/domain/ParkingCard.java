@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractAuditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import run.bequick.dreamccc.pats.enums.ParkingCardTypeEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
 @Table(name = "parking_card")
 @Entity
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class ParkingCard extends AbstractAuditable<AppUser,Long> {
 
     @Schema(name = "[展示/绑定时用]停车卡号")
@@ -34,7 +37,7 @@ public class ParkingCard extends AbstractAuditable<AppUser,Long> {
     @Schema(name = "停车卡类型")
     @Column(nullable = false)
     @NotEmpty
-    private ParkingCardType type;
+    private ParkingCardTypeEnum type;
 
     @Schema(name = "卡内余额")
     @NotEmpty

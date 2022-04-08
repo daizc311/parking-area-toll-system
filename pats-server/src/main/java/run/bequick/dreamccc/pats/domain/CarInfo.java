@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractAuditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ import javax.validation.constraints.NotNull;
 })
 @Entity
 @NoArgsConstructor
-
+@EntityListeners(AuditingEntityListener.class)
 public class CarInfo extends AbstractAuditable<AppUser, Long> {
 
     @Schema(name = "与车辆关联的客户信息")

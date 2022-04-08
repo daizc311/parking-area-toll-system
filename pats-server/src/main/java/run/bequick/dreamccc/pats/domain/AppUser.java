@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractAuditable;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import java.util.HashSet;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class AppUser extends AbstractAuditable<AppUser, Long> implements LoginAble {
 
 
@@ -28,9 +30,9 @@ public class AppUser extends AbstractAuditable<AppUser, Long> implements LoginAb
     @Column(nullable = false)
     private String password;
 
-    @JsonIgnore
-    @Column(nullable = false)
-    private String salt;
+//    @JsonIgnore
+//    @Column(nullable = false)
+//    private String salt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<AppRole> roles = new HashSet<>();

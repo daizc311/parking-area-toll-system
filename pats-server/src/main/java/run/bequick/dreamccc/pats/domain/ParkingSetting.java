@@ -3,10 +3,10 @@ package run.bequick.dreamccc.pats.domain;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.AbstractAuditable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -18,7 +18,15 @@ import java.math.BigDecimal;
 @Table(name = "parking_setting")
 @Entity
 @NoArgsConstructor
-public class ParkingSetting extends AbstractAuditable<AppUser, String> {
+public class ParkingSetting {
+
+    @Id
+    private String id;
+
+    @Schema(name = "系统名称", description = "会展示在登录页和title上")
+    @Column(nullable = false)
+    @NotEmpty
+    private String systemName;
 
     @Schema(name = "计费周期(秒)", minimum = "60", maximum = "86400")
     @Column(nullable = false)
@@ -45,9 +53,4 @@ public class ParkingSetting extends AbstractAuditable<AppUser, String> {
     @NotNull
     private Boolean firstCycleCanBilling;
 
-
-    @Override
-    public void setId(String id) {
-        super.setId(id);
-    }
 }
