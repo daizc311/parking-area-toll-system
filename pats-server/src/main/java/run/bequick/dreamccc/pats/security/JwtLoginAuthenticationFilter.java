@@ -111,7 +111,7 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    static class TokenResponse {
+    public static class TokenResponse {
         @JsonProperty("access_token")
         private String accessToken;
         @JsonProperty("created_at")
