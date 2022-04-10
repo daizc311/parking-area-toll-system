@@ -1,7 +1,6 @@
 package run.bequick.dreamccc.pats.service;
 
 
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.text.StrFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -113,7 +112,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         AppUser admin = appUserRepository.findByUsername("admin");
         if (admin == null) {
-            String adminPwd = UUID.fastUUID().toString(true);
+//            String adminPwd = UUID.fastUUID().toString(true);
+            String adminPwd = "admin";
             admin = new AppUser();
             admin.setUsername("admin");
             admin.setRoles(appRoleRepository.findAll());

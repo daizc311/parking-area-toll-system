@@ -20,7 +20,7 @@ public class ParkingSettingDServiceImpl implements ParkingSettingDService {
 
     @Override
     public ParkingSetting getSetting() {
-        return repository.getById(SETTING_ID);
+        return repository.findById(SETTING_ID).orElseThrow(() -> new BusinessException("系统设置错误，请重新初始化系统"));
     }
 
     @Override

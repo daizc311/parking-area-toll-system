@@ -6,7 +6,7 @@
     <parent>
         <groupId>run.bequick.dreamccc</groupId>
         <artifactId>parking-area-toll-system</artifactId>
-        <version>${revise}</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
