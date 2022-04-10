@@ -124,4 +124,14 @@ public class CustomerController {
         Customer bind = customerDService.bindCarInfo(customer, numberPlateParam.getValue());
         return DrResponse.data(bind);
     }
+
+    @Operation(summary = "获取当前登录客户", tags = {"Customer", "Login"})
+    @PostMapping("/getCurrentLogin")
+    public DrResponse<Customer> getCurrentLogin() {
+        var user = securityService.getCurrentCustomer()
+                .orElseThrow(() -> new BusinessException("获取当前客户信息失败"));
+        return DrResponse.data(user);
+    }
+
+
 }

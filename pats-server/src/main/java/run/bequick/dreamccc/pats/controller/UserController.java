@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import run.bequick.dreamccc.pats.common.BusinessException;
+import run.bequick.dreamccc.pats.common.DrResponse;
+import run.bequick.dreamccc.pats.domain.AppUser;
 import run.bequick.dreamccc.pats.param.LinkRole2UserParam;
+import run.bequick.dreamccc.pats.security.SecurityService;
 import run.bequick.dreamccc.pats.service.UserService;
 
 @Slf4j
@@ -19,6 +23,7 @@ import run.bequick.dreamccc.pats.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final SecurityService securityService;
 
 
 //    @RequestMapping(value = "/listAll",method = {RequestMethod.GET,RequestMethod.POST})
@@ -44,6 +49,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "获取当前登录用户", tags = {"Customer", "Login"})
+    @PostMapping("/getCurrentLogin")
+    public DrResponse<AppUser> getCurrentLogin() {
+        var user = securityService.getCurrentAppUser()
+                .orElseThrow(() -> new BusinessException("获取当前用户信息失败"));
+        return DrResponse.data(user);
+    }
 
 //
 //    @GetMapping("/{id}")
