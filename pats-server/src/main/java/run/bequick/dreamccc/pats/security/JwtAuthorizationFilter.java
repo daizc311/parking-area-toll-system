@@ -43,7 +43,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Orde
                 return;
             }
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-            if (Strings.isNotBlank(authHeader) && authHeader.startsWith(BEARER)) {
+            if (null != authHeader && authHeader.length() > 6 && authHeader.substring(0, BEARER.length()).equalsIgnoreCase(BEARER)) {
                 jwtTokenStr = authHeader.substring(BEARER.length());
             }
             final String authParameter = request.getParameter("token");
@@ -74,6 +74,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Orde
         } catch (JWTVerificationException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setHeader("Access-Control-Allow-Origin", "*");
             objectMapper.writeValue(response.getOutputStream(), DrResponse.failed(e.getMessage()));
             log.info(StrFormatter.format("Token验证失败:{}", e.getMessage()));
         }

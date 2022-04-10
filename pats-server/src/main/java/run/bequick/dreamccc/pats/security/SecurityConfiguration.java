@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -39,21 +40,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        var authenticationFilter = new JwtLoginAuthenticationFilter(authenticationManager(), objectMapper);
-        authenticationFilter.setFilterProcessesUrl(SecurityConstant.LOGIN_PATH);
+        var loginFilter = new JwtLoginAuthenticationFilter(authenticationManager(), objectMapper);
+        loginFilter.setFilterProcessesUrl(SecurityConstant.LOGIN_PATH);
+        var jwtAuthorizationFilter = new JwtAuthorizationFilter(objectMapper);
 
         http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .cors()
                 .and()
                 .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/setting/getSetting")).permitAll()
                 .and()
                 .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/customer/free/**")).permitAll()
                 .and()
+                .addFilterAfter(jwtAuthorizationFilter, SecurityContextPersistenceFilter.class)
+                .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/rest/**")).authenticated()
+                .and()
+                .addFilterAfter(jwtAuthorizationFilter, SecurityContextPersistenceFilter.class)
                 .authorizeRequests().requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .addFilter(authenticationFilter)
-                .addFilterBefore(new JwtAuthorizationFilter(objectMapper), LogoutFilter.class);
+                .addFilter(loginFilter)
+                .addFilterBefore(jwtAuthorizationFilter, LogoutFilter.class);
 
     }
 

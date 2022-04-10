@@ -56,6 +56,7 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
 
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setHeader("Access-Control-Allow-Origin", "*");
         objectMapper.writeValue(response.getOutputStream(), drResponse);
     }
 
@@ -103,9 +104,9 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
         tokenResponse.setExpiresIn(expiresSecond);
         tokenResponse.setTokenType("bearer");
 
-        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setStatus(HttpServletResponse.SC_OK);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setHeader("Access-Control-Allow-Origin", "*");
         objectMapper.writeValue(response.getOutputStream(), tokenResponse);
     }
 
