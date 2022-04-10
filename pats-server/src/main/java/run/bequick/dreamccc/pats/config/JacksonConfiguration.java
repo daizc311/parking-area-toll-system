@@ -14,8 +14,11 @@ public class JacksonConfiguration {
     Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
         return jacksonObjectMapperBuilder -> {
             SimpleBeanPropertyFilter fieldFilter = SimpleBeanPropertyFilter.serializeAllExcept("new", "hibernateLazyInitializer");
-            SimpleFilterProvider filterProvider = new SimpleFilterProvider().addFilter("defaultValue", fieldFilter);
+            SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+            filterProvider.setDefaultFilter(fieldFilter);
             jacksonObjectMapperBuilder.filters(filterProvider);
+            jacksonObjectMapperBuilder.failOnEmptyBeans(false);
+            jacksonObjectMapperBuilder.failOnUnknownProperties(false);
         };
     }
 
