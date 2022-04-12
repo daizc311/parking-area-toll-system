@@ -3,7 +3,7 @@ package run.bequick.dreamccc.pats.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +21,7 @@ import run.bequick.dreamccc.pats.security.SecurityConstant;
 public class FakedLoginController {
 
     @Operation(summary = "后台登录", tags = {"Login"})
-    @GetMapping(value = SecurityConstant.LOGIN_PATH)
+    @PostMapping(value = SecurityConstant.LOGIN_PATH)
     public JwtLoginAuthenticationFilter.TokenResponse login(@RequestParam String username, @RequestParam String password) {
         return null;
     }

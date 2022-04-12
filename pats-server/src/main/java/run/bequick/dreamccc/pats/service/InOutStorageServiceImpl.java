@@ -1,5 +1,6 @@
 package run.bequick.dreamccc.pats.service;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.text.StrFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -136,6 +137,8 @@ public class InOutStorageServiceImpl implements InOutStorageService {
     @Override
     public boolean outStorage(CarInfo carInfo) {
         final var outStorageToken = stringRedisTemplate.opsForValue().getAndDelete("outStorage/" + carInfo);
+
+        carParkingStatusDService.deleteStorageStatus(carInfo, new DateTime());
         return Objects.equals(carInfo.getNumberPlate(), outStorageToken);
     }
 

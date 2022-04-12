@@ -129,7 +129,7 @@ public class CustomerController {
     @PostMapping("/getCurrentLogin")
     public DrResponse<Customer> getCurrentLogin() {
         var user = securityService.getCurrentCustomer()
-                .orElseThrow(() -> new BusinessException("获取当前客户信息失败"));
+                .orElseThrow(() -> new BusinessException("获取当前用户信息失败"));
         return DrResponse.data(user);
     }
 

@@ -29,9 +29,9 @@ public class CarParkingLogDODServiceImpl implements CarParkingLogDODService {
         var carInfo = carParkingStatus.getCarInfo();
         var addInLog = new CarParkingLogDO();
 
-        addInLog.setCarId(addInLog.getCarId());
-        addInLog.setCarModelName(addInLog.getCarModelName());
-        addInLog.setCarNumberPlate(addInLog.getCarNumberPlate());
+        addInLog.setCarId(carParkingStatus.getCarInfo().getId());
+        addInLog.setCarModelName(carParkingStatus.getCarInfo().getModelName());
+        addInLog.setCarNumberPlate(carParkingStatus.getCarInfo().getNumberPlate());
         Customer carInfoCustomer = carInfo.getCustomer();
         if (Objects.nonNull(carInfoCustomer)) {
             addInLog.setCustomerId(carInfo.getId());

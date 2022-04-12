@@ -15,14 +15,16 @@ import java.util.Date;
  * @author Daizc
  */
 @Data
-@Table(name = "car_parking_status", indexes = {})
+@Table(name = "car_parking_status", indexes = {
+        @Index(name = "idx_cps_car_info_id", columnList = "car_info_id", unique = true)
+})
 @Entity
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class CarParkingStatus extends AbstractAuditable<AppUser, Long> {
 
     @OneToOne
-    @JoinColumn(name = "car_info_id", referencedColumnName = "id")
+    @JoinColumn(name = "car_info_id", referencedColumnName = "id", unique = true)
     @Schema(description = "车辆信息")
     private CarInfo carInfo;
 
