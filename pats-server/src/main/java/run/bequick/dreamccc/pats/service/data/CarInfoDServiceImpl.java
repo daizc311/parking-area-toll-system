@@ -23,14 +23,14 @@ public class CarInfoDServiceImpl implements CarInfoDService {
     }
 
     @Override
-    public Optional<CarInfo> getById(@Validated @NotNull Long id) {
+    public Optional<CarInfo> findById(@Validated @NotNull Long id) {
 
         var entity = repository.getById(id);
         return Optional.ofNullable(entity);
     }
 
     @Override
-    public Optional<CarInfo> getByNumberPlate(@Validated @NotEmpty String numberPlate) {
+    public Optional<CarInfo> findByNumberPlate(@Validated @NotEmpty String numberPlate) {
 
         var entity = repository.getByNumberPlate(numberPlate);
         return Optional.ofNullable(entity);

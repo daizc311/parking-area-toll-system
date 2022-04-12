@@ -26,6 +26,12 @@ public class DrResponse<DATA> {
         return response;
     }
 
+    public static <T> DrResponse<T> success(String message) {
+        final DrResponse<T> success = success();
+        success.setMessage(message);
+        return success;
+    }
+
     public static <D> DrResponse<D> failed() {
 
         return failed("失败");

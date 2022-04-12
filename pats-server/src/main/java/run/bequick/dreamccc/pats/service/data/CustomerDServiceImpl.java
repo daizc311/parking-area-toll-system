@@ -10,12 +10,15 @@ import org.jasypt.util.password.PasswordEncryptor;
 import org.springframework.stereotype.Service;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.ServiceLog;
-import run.bequick.dreamccc.pats.domain.*;
+import run.bequick.dreamccc.pats.domain.CarInfo;
+import run.bequick.dreamccc.pats.domain.Customer;
+import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.param.ThreeFactor;
 import run.bequick.dreamccc.pats.repository.CustomerRepository;
+import run.bequick.dreamccc.pats.service.InOutStorageService;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class CustomerDServiceImpl implements CustomerDService {
     private final CustomerRepository repository;
     private final ParkingCardDService parkingCardService;
     private final CarInfoDService carInfoService;
+    private final InOutStorageService inOutStorageService;
 
     @Override
     public Customer getById(Long id) {
@@ -62,7 +66,7 @@ public class CustomerDServiceImpl implements CustomerDService {
     @Override
     @ServiceLog(value = "绑定停车卡信息 - {pos} - customerId:{},cardNo:{}", paramEl = {"#root[0].id", "#root[1]"})
     public Customer bindParkingCard(Customer customer, String cardNo, String paramCardPwd) {
-        ParkingCard parkingCard = parkingCardService.getByCardNo(cardNo)
+        ParkingCard parkingCard = parkingCardService.findByCardNo(cardNo)
                 .orElseThrow(() -> new BusinessException(StrFormatter.format("找不到卡号为[{}]的停车卡", cardNo)));
 
         if (!Objects.equals(parkingCard.getCardPwd(), paramCardPwd)) {
@@ -78,7 +82,7 @@ public class CustomerDServiceImpl implements CustomerDService {
     @Override
     @ServiceLog(value = "绑定车辆信息 - {pos} - customerId:{},numberPlate:{}", paramEl = {"#root[0].id", "#root[1]"})
     public Customer bindCarInfo(Customer customer, String numberPlate) {
-        final CarInfo carInfo = carInfoService.getByNumberPlate(numberPlate)
+        final CarInfo carInfo = carInfoService.findByNumberPlate(numberPlate)
                 .orElseThrow(() -> new BusinessException(StrFormatter.format("找不到车牌号为[{}]车辆信息", numberPlate)));
 
         if (Objects.isNull(customer.getCarInfos())) {
@@ -87,25 +91,6 @@ public class CustomerDServiceImpl implements CustomerDService {
         customer.getCarInfos().add(carInfo);
         return repository.save(customer);
     }
-
-//    @Override
-    @ServiceLog
-    public ParkingCard payToParkingStatus(CarParkingStatus carParkingStatus,ParkingCard parkingCard){
-
-        // 已支付金额
-        final BigDecimal paidAmount = parkingCardService.listPayLogByCarPackingStatus(carParkingStatus).stream()
-                .map(ParkingCardAmountLogDO::getChangeAmount)
-                .reduce(BigDecimal::add)
-                .orElse(new BigDecimal(0));
-        //
-
-        final long timeDifference = new Date().getTime() - carParkingStatus.getInStorageDate().getTime();
-
-
-
-        return parkingCardService.pay(carParkingStatus, parkingCard, paidAmount);
-    }
-
 
     private PasswordEncryptor getPasswordEncryptor(String salt) {
         var passwordEncryptor = new ConfigurablePasswordEncryptor();

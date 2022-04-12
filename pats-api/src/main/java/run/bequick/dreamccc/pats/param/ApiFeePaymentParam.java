@@ -10,8 +10,13 @@ import java.math.BigDecimal;
 @Data
 public class ApiFeePaymentParam {
 
-    @Schema(description = "支付方式")
-    private String method = "未知";
+    @NotNull
+    @Schema(description = "停车卡Id", required = true)
+    private Long parkingCardId;
+
+    @NotNull
+    @Schema(description = "车辆Id", required = true)
+    private Long carInfoId;
 
     @Min(value = 0)
     @NotNull

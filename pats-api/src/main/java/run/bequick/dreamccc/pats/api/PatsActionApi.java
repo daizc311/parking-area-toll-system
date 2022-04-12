@@ -32,7 +32,7 @@ public interface PatsActionApi {
      */
     @PostMapping("/feePayment")
     @Operation(summary = "API缴费支付接口", tags = {"API"})
-    DrResponse<Object> feePayment(@RequestBody @Validated ApiFeePaymentParam param);
+    DrResponse<Boolean> feePayment(@RequestBody @Validated ApiFeePaymentParam param);
 
     /**
      * <p>API出库接口</p>
@@ -42,5 +42,5 @@ public interface PatsActionApi {
      */
     @PostMapping("/outStorage")
     @Operation(summary = "API出库接口", tags = {"API"})
-    DrResponse<Object> outStorage(@RequestBody @Validated ApiOutStorageParam param);
+    DrResponse<Boolean> outStorage(@RequestBody @Validated ApiOutStorageParam param);
 }

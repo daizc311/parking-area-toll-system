@@ -1,7 +1,5 @@
 package run.bequick.dreamccc.pats.controller;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -13,7 +11,6 @@ import run.bequick.dreamccc.pats.param.ApiFeePaymentParam;
 import run.bequick.dreamccc.pats.param.ApiInStorageParam;
 import run.bequick.dreamccc.pats.param.ApiOutStorageParam;
 import run.bequick.dreamccc.pats.service.InOutStorageService;
-import run.bequick.dreamccc.pats.service.data.CarInfoDService;
 
 @Slf4j
 @RestController
@@ -30,17 +27,21 @@ public class ApiActionController implements PatsActionApi {
     }
 
     @Override
-    public DrResponse<Object> feePayment(@RequestBody @Validated ApiFeePaymentParam param) {
+    public DrResponse<Boolean> feePayment(@RequestBody @Validated ApiFeePaymentParam param) {
 
-        inOutStorageService.feePayment(param);
-        return DrResponse.success();
+        final var isFeePayment = inOutStorageService.feePayment(param);
+        final DrResponse<Boolean> drResponse = DrResponse.data(isFeePayment);
+        drResponse.setMessage(isFeePayment ? "付款成功，车辆出库完成。" : "付款成功，但支付金额未达到总价，需要继续支付");
+        return drResponse;
     }
 
     @Override
-    public DrResponse<Object> outStorage(@RequestBody @Validated ApiOutStorageParam param) {
+    public DrResponse<Boolean> outStorage(@RequestBody @Validated ApiOutStorageParam param) {
 
-        inOutStorageService.outStorage(param);
-        return DrResponse.success();
+        final var isOutStorage = inOutStorageService.outStorage(param.getNumberPlate());
+        final DrResponse<Boolean> drResponse = DrResponse.data(isOutStorage);
+        drResponse.setMessage(isOutStorage ? "车辆出库完成" : "车辆未支付完成或支付后停留时间过长，请重新支付");
+        return drResponse;
     }
 
 }

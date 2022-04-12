@@ -12,9 +12,9 @@ public interface CarInfoDService {
 
     List<CarInfo> listAll();
 
-    Optional<CarInfo> getById(@Validated @NotNull Long id);
+    Optional<CarInfo> findById(@Validated @NotNull Long id);
 
-    Optional<CarInfo> getByNumberPlate(@Validated @NotEmpty String numberPlate);
+    Optional<CarInfo> findByNumberPlate(@Validated @NotEmpty String numberPlate);
 
     CarInfo saveCarInfo(@Validated CarInfo entity);
 

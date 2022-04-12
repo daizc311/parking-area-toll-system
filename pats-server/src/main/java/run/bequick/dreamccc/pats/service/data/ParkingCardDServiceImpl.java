@@ -9,6 +9,7 @@ import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 import run.bequick.dreamccc.pats.repository.ParkingCardRepository;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +26,12 @@ public class ParkingCardDServiceImpl implements ParkingCardDService {
     }
 
     @Override
-    public Optional<ParkingCard> getByCardNo(String cardNo) {
+    public Optional<ParkingCard> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public Optional<ParkingCard> findByCardNo(String cardNo) {
         return repository.getByCardNo(cardNo);
     }
 
@@ -36,6 +42,7 @@ public class ParkingCardDServiceImpl implements ParkingCardDService {
     }
 
     @Override
+    @Transactional
     public ParkingCard pay(CarParkingStatus carParkingStatus, ParkingCard parkingCard, BigDecimal amount) {
         switch (parkingCard.getType()) {
             case DISPOSABLE:

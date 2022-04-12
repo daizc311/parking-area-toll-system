@@ -1,6 +1,5 @@
 package run.bequick.dreamccc.pats.service.data;
 
-import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
 import run.bequick.dreamccc.pats.domain.CarParkingStatus;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
@@ -13,7 +12,9 @@ public interface ParkingCardDService {
 
     ParkingCard save(ParkingCard parkingCard);
 
-    Optional<ParkingCard> getByCardNo(String cardNo);
+    Optional<ParkingCard> findById(Long id);
+
+    Optional<ParkingCard> findByCardNo(String cardNo);
 
     List<ParkingCardAmountLogDO> listPayLogByCarPackingStatus(CarParkingStatus carParkingStatus);
 
