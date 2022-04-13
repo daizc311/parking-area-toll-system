@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.domain.CarParkingStatus;
+import run.bequick.dreamccc.pats.domain.Customer;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 import run.bequick.dreamccc.pats.repository.ParkingCardRepository;
@@ -19,6 +20,8 @@ import java.util.Optional;
 public class ParkingCardDServiceImpl implements ParkingCardDService {
     private final ParkingCardRepository repository;
     private final ParkingCardAmountLogDODService logDODService;
+
+    private final ParkingSettingDService settingDService;
 
     @Override
     public ParkingCard save(@Validated ParkingCard parkingCard) {
@@ -44,17 +47,32 @@ public class ParkingCardDServiceImpl implements ParkingCardDService {
     @Override
     @Transactional
     public ParkingCard pay(CarParkingStatus carParkingStatus, ParkingCard parkingCard, BigDecimal amount) {
+        final var setting = settingDService.getSetting();
         switch (parkingCard.getType()) {
             case DISPOSABLE:
             case USER_PERSISTENCE:
                 final BigDecimal original = parkingCard.getAmount();
+                // 精确减法
                 final BigDecimal result = original.subtract(amount);
                 if (result.signum() == -1) {
                     throw new BusinessException("停车卡余额不足");
                 }
                 parkingCard.setAmount(result);
                 logDODService.addAmountLog(ParkingCardAmountLogDO.AmountChangeType.CONSUME, parkingCard,
-                        carParkingStatus.getId(), original, amount, result);
+                        carParkingStatus.getId().toString(), original, amount, result);
+                return repository.save(parkingCard);
+            case COUNT:
+                var count = parkingCard.getAmount().intValue();
+                if (amount.compareTo(setting.getMaxCountAmount()) > 0) {
+                    throw new BusinessException("停车时长超过次卡可支付的最大金额");
+                }
+                if (count <= 0) {
+                    throw new BusinessException("次卡余额不足，无法支付");
+                }
+                final var countResult = BigDecimal.valueOf(count - 1, 2);
+                parkingCard.setAmount(countResult);
+                logDODService.addAmountLog(ParkingCardAmountLogDO.AmountChangeType.CONSUME, parkingCard,
+                        carParkingStatus.getId().toString(), parkingCard.getAmount(), amount, countResult);
                 return repository.save(parkingCard);
             default:
                 throw new BusinessException("未知的停车卡类型");
@@ -62,19 +80,29 @@ public class ParkingCardDServiceImpl implements ParkingCardDService {
     }
 
     @Override
-    public ParkingCard recharge(Long orderId, ParkingCard parkingCard, BigDecimal amount) {
+    public ParkingCard recharge(String orderNum, ParkingCard parkingCard, BigDecimal amount) {
         switch (parkingCard.getType()) {
             case DISPOSABLE:
                 throw new BusinessException("一次性停车卡不支持充值");
+            case COUNT:
+                throw new BusinessException("次卡不支持充值");
             case USER_PERSISTENCE:
                 final BigDecimal original = parkingCard.getAmount();
                 final BigDecimal result = original.add(amount);
                 parkingCard.setAmount(result);
                 logDODService.addAmountLog(ParkingCardAmountLogDO.AmountChangeType.CONSUME, parkingCard,
-                        orderId, original, amount, result);
+                        orderNum, original, amount, result);
                 return repository.save(parkingCard);
             default:
                 throw new BusinessException("未知的停车卡类型");
         }
+    }
+
+    @Override
+    public ParkingCard bindCustomer(ParkingCard parkingCard, Customer customer) {
+
+        parkingCard.setCustomer(customer);
+        repository.save(parkingCard);
+        return parkingCard;
     }
 }

@@ -42,6 +42,13 @@ public class ParkingSetting {
     @Max(1000)
     private BigDecimal billingAmount;
 
+    @Schema(description = "次卡允许支付的最大金额(精确到小数后两位)", minimum = "0", maximum = "1000")
+    @Column(nullable = false, precision = 2)
+    @NotNull
+    @Min(0)
+    @Max(1000)
+    private BigDecimal maxCountAmount;
+
     @Schema(description = "车位总数")
     @Column(nullable = false)
     @NotNull

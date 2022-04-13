@@ -68,6 +68,9 @@ class ParkingAreaTollSystemApplicationTests {
         customerRegisterParam.setThreeFactor(threeFactorId);
         final var customer = customerController.register(customerRegisterParam).getData();
 
+        // 充值
+//        customerController.
+//        "PER-"+customer.getId()
 
         final var context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(new JwtUsernamePasswordAuthenticationToken(

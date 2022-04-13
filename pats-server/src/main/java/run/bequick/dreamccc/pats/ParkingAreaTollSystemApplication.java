@@ -33,7 +33,7 @@ public class ParkingAreaTollSystemApplication {
 
     @Bean
     @Order(Ordered.LOWEST_PRECEDENCE)
-    CommandLineRunner runner1(
+    CommandLineRunner bootstrapInit(
             ParkingSettingDService parkingSettingDService,
             UserService userService
     ) {

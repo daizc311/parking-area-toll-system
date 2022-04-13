@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 @Entity
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class ParkingCardAmountLogDO extends AbstractAuditable<AppUser,Long> {
+public class ParkingCardAmountLogDO extends AbstractAuditable<AppUser, Long> {
 
     @Schema(description = "用户ID")
     private Long userId;
@@ -34,8 +34,8 @@ public class ParkingCardAmountLogDO extends AbstractAuditable<AppUser,Long> {
     @Schema(description = "停车卡ID")
     private Long cardId;
 
-    @Schema(description = "变动事件Id:充值时为订单Id,消费时为停车记录Id")
-    private Long changeEventId;
+    @Schema(description = "变动事件Id:充值时为外部提供的订单号,消费时为停车记录Id")
+    private String changeEventId;
 
     @Schema(description = "变动前余额")
     private BigDecimal beforeAmount;

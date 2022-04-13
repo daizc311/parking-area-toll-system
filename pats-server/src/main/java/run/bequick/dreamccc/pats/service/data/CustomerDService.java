@@ -1,14 +1,13 @@
 package run.bequick.dreamccc.pats.service.data;
 
-import run.bequick.dreamccc.pats.common.WhateverStringParam;
-import run.bequick.dreamccc.pats.domain.CarInfo;
 import run.bequick.dreamccc.pats.domain.Customer;
-import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.param.ThreeFactor;
+
+import java.util.Optional;
 
 public interface CustomerDService {
 
-    Customer getById(Long id);
+    Optional<Customer> findById(Long id);
 
     Customer saveCustomer(ThreeFactor threeFactor, String loginName, String password);
 

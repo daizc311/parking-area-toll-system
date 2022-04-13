@@ -51,6 +51,8 @@ public class ParkingSettingDServiceImpl implements ParkingSettingDService {
                     // 默认 30分钟  2元
                     parkingSetting.setBillingCycle(1800L);
                     parkingSetting.setBillingAmount(BigDecimal.valueOf(200L, 2));
+                    // 次卡最多允许停放8小时
+                    parkingSetting.setMaxCountAmount(BigDecimal.valueOf(32L, 2));
                     repository.save(parkingSetting);
                     return parkingSetting;
                 });

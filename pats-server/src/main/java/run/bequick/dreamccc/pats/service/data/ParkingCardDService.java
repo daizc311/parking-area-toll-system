@@ -1,6 +1,7 @@
 package run.bequick.dreamccc.pats.service.data;
 
 import run.bequick.dreamccc.pats.domain.CarParkingStatus;
+import run.bequick.dreamccc.pats.domain.Customer;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 
@@ -20,5 +21,7 @@ public interface ParkingCardDService {
 
     ParkingCard pay(CarParkingStatus carParkingStatus, ParkingCard parkingCard, BigDecimal amount);
 
-    ParkingCard recharge(Long orderId, ParkingCard parkingCard, BigDecimal amount);
+    ParkingCard recharge(String orderNum, ParkingCard parkingCard, BigDecimal amount);
+
+    ParkingCard bindCustomer(ParkingCard parkingCard, Customer customer);
 }

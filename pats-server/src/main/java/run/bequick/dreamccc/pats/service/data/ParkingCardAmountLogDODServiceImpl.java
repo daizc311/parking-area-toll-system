@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.stereotype.Service;
 import run.bequick.dreamccc.pats.common.ServiceLog;
-import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 import run.bequick.dreamccc.pats.repository.ParkingCardAmountLogDORepository;
@@ -21,7 +20,7 @@ public class ParkingCardAmountLogDODServiceImpl implements ParkingCardAmountLogD
     @Override
     @ServiceLog(value = "保存停车卡充值/消费日志 - {pos} - cardId:{},type:{},after:{},change:{},before:{}",
             paramEl = {"#root[1].id", "#root[0]", "#root[3]", "#root[4]", "#root[5]"})
-    public void addAmountLog(ParkingCardAmountLogDO.AmountChangeType type, ParkingCard card, Long changeEventId,
+    public void addAmountLog(ParkingCardAmountLogDO.AmountChangeType type, ParkingCard card, String changeEventId,
                              BigDecimal after, BigDecimal change, BigDecimal before) {
         final var addDO = new ParkingCardAmountLogDO();
         addDO.setAfterAmount(after);

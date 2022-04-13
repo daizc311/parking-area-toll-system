@@ -1,6 +1,5 @@
 package run.bequick.dreamccc.pats.service.data;
 
-import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 
@@ -20,7 +19,7 @@ public interface ParkingCardAmountLogDODService {
      * @param result   最终金额
      */
     @Transactional
-    void addAmountLog(ParkingCardAmountLogDO.AmountChangeType type, ParkingCard card,Long changeEventId,
+    void addAmountLog(ParkingCardAmountLogDO.AmountChangeType type, ParkingCard card, String changeEventId,
                       BigDecimal after, BigDecimal change, BigDecimal before);
 
     List<ParkingCardAmountLogDO> listByCarPackingStatusId(Long id);

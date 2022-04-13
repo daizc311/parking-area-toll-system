@@ -13,12 +13,16 @@ import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarInfo;
 import run.bequick.dreamccc.pats.domain.Customer;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
+import run.bequick.dreamccc.pats.enums.ParkingCardTypeEnum;
 import run.bequick.dreamccc.pats.param.ThreeFactor;
 import run.bequick.dreamccc.pats.repository.CustomerRepository;
 import run.bequick.dreamccc.pats.service.InOutStorageService;
 
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +33,12 @@ public class CustomerDServiceImpl implements CustomerDService {
     private final InOutStorageService inOutStorageService;
 
     @Override
-    public Customer getById(Long id) {
-        return repository.getById(id);
+    public Optional<Customer> findById(Long id) {
+        return repository.findById(id);
     }
 
     @Override
+    @Transactional
     @ServiceLog(value = "新增客户 - {pos} - realName:{},mobile:{}", paramEl = {"#root[0].realName", "#root[0].mobile"})
     public Customer saveCustomer(ThreeFactor threeFactor, String loginName, String password) {
 
@@ -47,7 +52,17 @@ public class CustomerDServiceImpl implements CustomerDService {
         addC.setLoginName(loginName);
         addC.setPassword(encryptPassword);
         addC.setSalt(salt);
-        return repository.save(addC);
+        final var customer = repository.save(addC);
+
+        var parkingCard = new ParkingCard();
+        parkingCard.setAmount(new BigDecimal(0));
+        parkingCard.setCardNo("PER-" + customer.getId());
+        parkingCard.setCardPwd(UUID.fastUUID().toString(true));
+        parkingCard.setType(ParkingCardTypeEnum.USER_PERSISTENCE);
+        parkingCard.setCustomer(customer);
+        parkingCard = parkingCardService.save(parkingCard);
+
+        return customer;
     }
 
     @Override
