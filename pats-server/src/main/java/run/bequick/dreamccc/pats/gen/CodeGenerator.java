@@ -1,7 +1,5 @@
 package run.bequick.dreamccc.pats.gen;
 
-import cn.hutool.core.io.LineHandler;
-import cn.hutool.core.lang.func.Func;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -18,7 +16,7 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 @Log4j2
-public class FreemarkerGen {
+public class CodeGenerator {
 
     public final static String BASE_PROJECT_PATH_2 = "D:\\IdeaProjects\\demo\\pats-server\\";
     public final static String BASE_PROJECT_PATH = "D:\\Git_Project\\parking-area-toll-system\\pats-server\\";

@@ -13,6 +13,7 @@ public class JacksonConfiguration {
     @Bean
     Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
         return jacksonObjectMapperBuilder -> {
+            // 序列化时过滤jpa实体额外的字段
             SimpleBeanPropertyFilter fieldFilter = SimpleBeanPropertyFilter.serializeAllExcept("new", "hibernateLazyInitializer");
             SimpleFilterProvider filterProvider = new SimpleFilterProvider();
             filterProvider.setDefaultFilter(fieldFilter);
