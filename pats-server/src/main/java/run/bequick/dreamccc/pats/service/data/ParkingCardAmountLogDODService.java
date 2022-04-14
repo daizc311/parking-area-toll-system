@@ -1,9 +1,9 @@
 package run.bequick.dreamccc.pats.service.data;
 
+import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 

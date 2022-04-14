@@ -4,6 +4,7 @@ import cn.hutool.core.text.StrFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarInfo;
@@ -11,7 +12,6 @@ import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
 import run.bequick.dreamccc.pats.domain.CarParkingStatus;
 import run.bequick.dreamccc.pats.repository.CarParkingStatusRepository;
 
-import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.AppRole;
 import run.bequick.dreamccc.pats.domain.AppUser;
@@ -18,7 +19,6 @@ import run.bequick.dreamccc.pats.repository.AppRoleRepository;
 import run.bequick.dreamccc.pats.repository.AppUserRepository;
 import run.bequick.dreamccc.pats.security.JwtUserDetail;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;

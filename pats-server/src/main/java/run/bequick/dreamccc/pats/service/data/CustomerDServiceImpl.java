@@ -8,6 +8,7 @@ import org.jasypt.salt.StringFixedSaltGenerator;
 import org.jasypt.util.password.ConfigurablePasswordEncryptor;
 import org.jasypt.util.password.PasswordEncryptor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarInfo;
@@ -18,7 +19,6 @@ import run.bequick.dreamccc.pats.param.ThreeFactor;
 import run.bequick.dreamccc.pats.repository.CustomerRepository;
 import run.bequick.dreamccc.pats.service.InOutStorageService;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Objects;

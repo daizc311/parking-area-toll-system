@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarInfo;
@@ -19,7 +20,6 @@ import run.bequick.dreamccc.pats.service.data.CarParkingStatusDService;
 import run.bequick.dreamccc.pats.service.data.ParkingCardDService;
 import run.bequick.dreamccc.pats.service.data.ParkingSettingDService;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;

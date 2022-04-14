@@ -2,6 +2,7 @@ package run.bequick.dreamccc.pats.service.data;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.domain.CarParkingStatus;
@@ -10,7 +11,6 @@ import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 import run.bequick.dreamccc.pats.repository.ParkingCardRepository;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +24,7 @@ public class ParkingCardDServiceImpl implements ParkingCardDService {
     private final ParkingSettingDService settingDService;
 
     @Override
+    @Transactional
     public ParkingCard save(@Validated ParkingCard parkingCard) {
         return repository.save(parkingCard);
     }

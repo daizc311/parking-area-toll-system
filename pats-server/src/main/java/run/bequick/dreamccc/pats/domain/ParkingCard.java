@@ -9,6 +9,7 @@ import run.bequick.dreamccc.pats.enums.ParkingCardTypeEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 
@@ -36,11 +37,11 @@ public class ParkingCard extends AbstractAuditable<AppUser,Long> {
 
     @Schema(description = "停车卡类型")
     @Column(nullable = false)
-    @NotEmpty
+    @NotNull
     private ParkingCardTypeEnum type;
 
     @Schema(description = "卡内余额")
-    @NotEmpty
+    @NotNull
     private BigDecimal amount;
 
     @Schema(description = "与停车卡关联的客户信息")

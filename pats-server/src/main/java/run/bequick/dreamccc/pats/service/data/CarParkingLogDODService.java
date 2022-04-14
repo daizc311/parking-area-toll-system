@@ -1,9 +1,8 @@
 package run.bequick.dreamccc.pats.service.data;
 
+import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
 import run.bequick.dreamccc.pats.domain.CarParkingStatus;
-
-import javax.transaction.Transactional;
 
 public interface CarParkingLogDODService {
 
