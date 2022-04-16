@@ -3,16 +3,15 @@ package run.bequick.dreamccc.pats.domain;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import run.bequick.dreamccc.pats.common.PayPriceConverter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Data
 @Table(name = "parking_setting")
@@ -47,7 +46,13 @@ public class ParkingSetting {
     @NotNull
     @Min(0)
     @Max(1000)
-    private BigDecimal maxCountAmount;
+    private BigDecimal maxCountCardCanAmount;
+
+    @Schema(description = "次卡允许支付的最大金额(精确到小数后两位)", minimum = "0", maximum = "1000")
+    @Column(nullable = false, precision = 2, columnDefinition = "json")
+    @NotNull
+    @Convert(converter = PayPriceConverter.class)
+    private Map<Integer, BigDecimal> countCardAmountMap;
 
     @Schema(description = "车位总数")
     @Column(nullable = false)

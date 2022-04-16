@@ -10,6 +10,7 @@ import run.bequick.dreamccc.pats.repository.CarParkingStatusRepository;
 import run.bequick.dreamccc.pats.repository.ParkingSettingRepository;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +53,13 @@ public class ParkingSettingDServiceImpl implements ParkingSettingDService {
                     parkingSetting.setBillingCycle(1800L);
                     parkingSetting.setBillingAmount(BigDecimal.valueOf(200L, 2));
                     // 次卡最多允许停放8小时
-                    parkingSetting.setMaxCountAmount(BigDecimal.valueOf(32L, 2));
+                    parkingSetting.setMaxCountCardCanAmount(BigDecimal.valueOf(32L, 2));
+                    // 次卡充值规则
+                    final var map = new HashMap<Integer, BigDecimal>();
+                    map.put(5, BigDecimal.valueOf(150));
+                    map.put(10, BigDecimal.valueOf(200));
+                    map.put(30, BigDecimal.valueOf(500));
+                    parkingSetting.setCountCardAmountMap(map);
                     repository.save(parkingSetting);
                     return parkingSetting;
                 });

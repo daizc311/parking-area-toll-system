@@ -51,10 +51,14 @@ public class ParkingCardController {
         }
 
         final var parkingCard = new ParkingCard();
-        parkingCard.setAmount(new BigDecimal(0));
         parkingCard.setCardPwd(UUID.fastUUID().toString(true));
         parkingCard.setCardNo("PRC-" + UUID.fastUUID().toString(true));
         parkingCard.setType(param.getType());
+//        if(param.getType().equals(ParkingCardTypeEnum.COUNT)){
+//            parkingCard.setAmount(new BigDecimal(30));
+//        }else {
+        parkingCard.setAmount(new BigDecimal(0));
+//        }
         return DrResponse.data(parkingCardDService.save(parkingCard));
     }
 

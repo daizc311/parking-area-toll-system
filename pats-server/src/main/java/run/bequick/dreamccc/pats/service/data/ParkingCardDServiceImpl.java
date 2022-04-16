@@ -13,6 +13,7 @@ import run.bequick.dreamccc.pats.repository.ParkingCardRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -20,7 +21,6 @@ import java.util.Optional;
 public class ParkingCardDServiceImpl implements ParkingCardDService {
     private final ParkingCardRepository repository;
     private final ParkingCardAmountLogDODService logDODService;
-
     private final ParkingSettingDService settingDService;
 
     @Override
@@ -64,7 +64,7 @@ public class ParkingCardDServiceImpl implements ParkingCardDService {
                 return repository.save(parkingCard);
             case COUNT:
                 var count = parkingCard.getAmount().intValue();
-                if (amount.compareTo(setting.getMaxCountAmount()) > 0) {
+                if (amount.compareTo(setting.getMaxCountCardCanAmount()) > 0) {
                     throw new BusinessException("停车时长超过次卡可支付的最大金额");
                 }
                 if (count <= 0) {
@@ -86,12 +86,25 @@ public class ParkingCardDServiceImpl implements ParkingCardDService {
             case DISPOSABLE:
                 throw new BusinessException("一次性停车卡不支持充值");
             case COUNT:
-                throw new BusinessException("次卡不支持充值");
+                final var countCardAmountMap = settingDService.getSetting().getCountCardAmountMap();
+                for (Map.Entry<Integer, BigDecimal> entry : countCardAmountMap.entrySet()) {
+                    Integer rechargeCount = entry.getKey();
+                    BigDecimal rechargeAmount = entry.getValue();
+                    if (rechargeAmount.compareTo(amount) == 0) {
+                        final var original = parkingCard.getAmount();
+                        final var result = original.add(BigDecimal.valueOf(rechargeCount));
+                        parkingCard.setAmount(result);
+                        logDODService.addAmountLog(ParkingCardAmountLogDO.AmountChangeType.RECHARGE, parkingCard,
+                                orderNum, original, amount, result);
+                        return repository.save(parkingCard);
+                    }
+                }
+                throw new BusinessException("充值失败，未找到该金额的充值规则");
             case USER_PERSISTENCE:
                 final BigDecimal original = parkingCard.getAmount();
                 final BigDecimal result = original.add(amount);
                 parkingCard.setAmount(result);
-                logDODService.addAmountLog(ParkingCardAmountLogDO.AmountChangeType.CONSUME, parkingCard,
+                logDODService.addAmountLog(ParkingCardAmountLogDO.AmountChangeType.RECHARGE, parkingCard,
                         orderNum, original, amount, result);
                 return repository.save(parkingCard);
             default:
