@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.AppRole;
 import run.bequick.dreamccc.pats.domain.AppUser;
@@ -122,6 +123,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             admin = appUserRepository.save(admin);
             log.warn("admin密码已生成:{}", adminPwd);
         }
+    }
+
+    @Override
+    public AppUser changePassword(AppUser user, String newPassword) {
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        return appUserRepository.save(user);
+    }
+
+    @Override
+    public AppUser changePassword(AppUser user, String oldPassword, String newPassword) {
+        final var pwdMatch = passwordEncoder.matches(oldPassword, user.getPassword());
+        if (!pwdMatch) {
+            throw new BusinessException("原密码不正确");
+        }
+        return changePassword(user, newPassword);
     }
 
 }

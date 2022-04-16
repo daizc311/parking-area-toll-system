@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.DrResponse;
 import run.bequick.dreamccc.pats.domain.AppUser;
+import run.bequick.dreamccc.pats.param.ChangePasswordParam;
 import run.bequick.dreamccc.pats.param.LinkRole2UserParam;
 import run.bequick.dreamccc.pats.security.SecurityService;
 import run.bequick.dreamccc.pats.service.UserService;
@@ -49,11 +50,21 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "获取当前登录用户", tags = {"Customer", "Login"})
+    @Operation(summary = "获取当前登录用户", tags = {"AppUser", "Login"})
     @PostMapping("/getCurrentLogin")
     public DrResponse<AppUser> getCurrentLogin() {
         var user = securityService.getCurrentAppUser()
                 .orElseThrow(() -> new BusinessException("获取当前用户信息失败"));
+        return DrResponse.data(user);
+    }
+
+    @Operation(summary = "修改当前登录用户密码", tags = {"AppUser"})
+    @PostMapping("/changePassword")
+    public DrResponse<AppUser> changePassword(@Validated @RequestBody ChangePasswordParam changePasswordParam) {
+        var user = securityService.getCurrentAppUser()
+                .orElseThrow(() -> new BusinessException("获取当前用户信息失败"));
+
+        user = userService.changePassword(user, changePasswordParam.getOldPassword(), changePasswordParam.getNewPassword());
         return DrResponse.data(user);
     }
 

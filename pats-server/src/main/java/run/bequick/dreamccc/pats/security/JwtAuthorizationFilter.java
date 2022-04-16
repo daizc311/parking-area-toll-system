@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter implements Orde
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setHeader("Access-Control-Allow-Origin", "*");
-            objectMapper.writeValue(response.getOutputStream(), DrResponse.failed(e.getMessage()));
+            final var failed = DrResponse.failed(e.getMessage());
+            if (e instanceof TokenExpiredException) {
+                // 续期
+                failed.setStatus(101);
+                failed.setMessage("用户登录状态已过期");
+            }
+            objectMapper.writeValue(response.getOutputStream(), failed);
             log.info(StrFormatter.format("Token验证失败:{}", e.getMessage()));
         }
     }

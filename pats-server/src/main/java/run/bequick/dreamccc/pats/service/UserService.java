@@ -18,4 +18,8 @@ public interface UserService {
     void linkRole2UserWithName(String roleName, String username);
 
     void init();
+
+    AppUser changePassword(AppUser user, String newPassword);
+
+    AppUser changePassword(AppUser user, String oldPassword, String newPassword);
 }

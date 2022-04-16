@@ -53,7 +53,7 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
         log.info("用户[{}]登录失败，cause:{}", username, failed.getMessage());
         DrResponse<Object> drResponse = DrResponse.failed();
         drResponse.setMessage(failed.getMessage());
-
+        drResponse.setStatus(100);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setHeader("Access-Control-Allow-Origin", "*");
