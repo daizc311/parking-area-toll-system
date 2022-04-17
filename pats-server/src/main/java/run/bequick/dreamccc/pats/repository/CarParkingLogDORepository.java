@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
 
 @Repository
-public interface CarParkingLogDORepository extends JpaRepository<CarParkingLogDO,Long> {
-
+public interface CarParkingLogDORepository extends JpaRepository<CarParkingLogDO, Long> {
+//
+//    @Override
+//    List<CarParkingLogDO> findByParkingDate
 }

@@ -16,4 +16,6 @@ public interface CustomerDService {
     Customer bindParkingCard(Customer customer, String cardNo, String paramCardPwd);
 
     Customer bindCarInfo(Customer customer, String numberPlate);
+
+    Customer saveCustomer(Customer customer);
 }

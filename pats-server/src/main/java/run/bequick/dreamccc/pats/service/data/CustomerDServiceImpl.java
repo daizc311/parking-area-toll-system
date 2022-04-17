@@ -107,6 +107,31 @@ public class CustomerDServiceImpl implements CustomerDService {
         return repository.save(customer);
     }
 
+    @Override
+    public Customer saveCustomer(Customer customer) {
+        var salt = UUID.fastUUID().toString(true);
+        var encryptPassword = getPasswordEncryptor(salt).encryptPassword(customer.getPassword());
+
+        Customer addC = new Customer();
+        addC.setIdNumber(customer.getIdNumber());
+        addC.setMobile(customer.getMobile());
+        addC.setRealName(customer.getRealName());
+        addC.setLoginName(customer.getLoginName());
+        addC.setPassword(encryptPassword);
+        addC.setSalt(salt);
+        final var saveCustomer = repository.save(addC);
+
+        var parkingCard = new ParkingCard();
+        parkingCard.setAmount(new BigDecimal(0));
+        parkingCard.setCardNo("PER-" + customer.getId());
+        parkingCard.setCardPwd(UUID.fastUUID().toString(true));
+        parkingCard.setType(ParkingCardTypeEnum.USER_PERSISTENCE);
+        parkingCard.setCustomer(customer);
+        parkingCard = parkingCardService.save(parkingCard);
+
+        return saveCustomer;
+    }
+
     private PasswordEncryptor getPasswordEncryptor(String salt) {
         var passwordEncryptor = new ConfigurablePasswordEncryptor();
         var digesterConfig = new SimpleStringDigesterConfig();

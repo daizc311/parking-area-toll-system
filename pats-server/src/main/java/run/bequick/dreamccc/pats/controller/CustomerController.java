@@ -133,5 +133,13 @@ public class CustomerController {
         return DrResponse.data(user);
     }
 
+    @Operation(summary = "获取当前登录客户", tags = {"Customer", "Login"})
+    @PostMapping("/addCustomer")
+    public DrResponse<Customer> addCustomer(Customer customer) {
+
+        final var saveCustomer = customerDService.saveCustomer(customer);
+        return DrResponse.data(saveCustomer);
+    }
+
 
 }
