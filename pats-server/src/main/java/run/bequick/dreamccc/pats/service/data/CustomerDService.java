@@ -15,6 +15,9 @@ public interface CustomerDService {
 
     Customer bindParkingCard(Customer customer, String cardNo, String paramCardPwd);
 
+//    @ServiceLog(value = "绑定停车卡信息 - {pos} - customerId:{},cardNo:{}", paramEl = {"#root[0].id", "#root[1]"})
+//    Customer bindParkingCard(Customer customer, ParkingCard parkingCard);
+
     Customer bindCarInfo(Customer customer, String numberPlate);
 
     Customer saveCustomer(Customer customer);

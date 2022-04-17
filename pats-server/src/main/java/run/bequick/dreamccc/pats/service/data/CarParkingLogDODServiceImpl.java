@@ -3,7 +3,6 @@ package run.bequick.dreamccc.pats.service.data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarParkingLogDO;
@@ -22,7 +21,7 @@ public class CarParkingLogDODServiceImpl implements CarParkingLogDODService {
 
     private final CarParkingLogDORepository repository;
 
-    @Transactional
+
     @Override
     @ServiceLog(value = "添加出入库记录 - {pos} - 方向:{},carId:{}", paramEl = {"#root[0]", "#root[1].carInfo.id"})
     public void addStorageLog(@Validated @NotNull CarParkingLogDO.CarParkingType type, CarParkingStatus carParkingStatus) {

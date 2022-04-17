@@ -21,6 +21,7 @@ import run.bequick.dreamccc.pats.service.InOutStorageService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -79,6 +80,7 @@ public class CustomerDServiceImpl implements CustomerDService {
     }
 
     @Override
+    @Transactional
     @ServiceLog(value = "绑定停车卡信息 - {pos} - customerId:{},cardNo:{}", paramEl = {"#root[0].id", "#root[1]"})
     public Customer bindParkingCard(Customer customer, String cardNo, String paramCardPwd) {
         ParkingCard parkingCard = parkingCardService.findByCardNo(cardNo)
@@ -91,10 +93,20 @@ public class CustomerDServiceImpl implements CustomerDService {
             customer.setParkingCards(new ArrayList<>());
         }
         customer.getParkingCards().add(parkingCard);
+        parkingCard.setCustomer(customer);
         return repository.save(customer);
     }
 
+//    @Override
+//    @ServiceLog(value = "绑定停车卡信息 - {pos} - customerId:{},cardNo:{}", paramEl = {"#root[0].id", "#root[1].id"})
+//    public Customer bindParkingCard(Customer customer, ParkingCard parkingCard) {
+//
+//        customer.getParkingCards().add(parkingCard);
+//        return repository.save(customer);
+//    }
+
     @Override
+    @Transactional
     @ServiceLog(value = "绑定车辆信息 - {pos} - customerId:{},numberPlate:{}", paramEl = {"#root[0].id", "#root[1]"})
     public Customer bindCarInfo(Customer customer, String numberPlate) {
         final CarInfo carInfo = carInfoService.findByNumberPlate(numberPlate)
@@ -104,10 +116,12 @@ public class CustomerDServiceImpl implements CustomerDService {
             customer.setCarInfos(new ArrayList<>());
         }
         customer.getCarInfos().add(carInfo);
+        carInfo.setCustomer(customer);
         return repository.save(customer);
     }
 
     @Override
+    @Transactional
     public Customer saveCustomer(Customer customer) {
         var salt = UUID.fastUUID().toString(true);
         var encryptPassword = getPasswordEncryptor(salt).encryptPassword(customer.getPassword());
@@ -123,10 +137,11 @@ public class CustomerDServiceImpl implements CustomerDService {
 
         var parkingCard = new ParkingCard();
         parkingCard.setAmount(new BigDecimal(0));
-        parkingCard.setCardNo("PER-" + customer.getId());
+        parkingCard.setCardNo("PER-" + UUID.fastUUID().toString(true));
         parkingCard.setCardPwd(UUID.fastUUID().toString(true));
         parkingCard.setType(ParkingCardTypeEnum.USER_PERSISTENCE);
-        parkingCard.setCustomer(customer);
+        parkingCard.setCustomer(saveCustomer);
+        saveCustomer.setParkingCards(Collections.singletonList(parkingCard));
         parkingCard = parkingCardService.save(parkingCard);
 
         return saveCustomer;

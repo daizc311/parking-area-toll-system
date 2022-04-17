@@ -1,6 +1,5 @@
 package run.bequick.dreamccc.pats.service.data;
 
-import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
 import run.bequick.dreamccc.pats.domain.ParkingCardAmountLogDO;
 
@@ -18,7 +17,7 @@ public interface ParkingCardAmountLogDODService {
      * @param amount   变动金额
      * @param result   最终金额
      */
-    @Transactional
+
     void addAmountLog(ParkingCardAmountLogDO.AmountChangeType type, ParkingCard card, String changeEventId,
                       BigDecimal after, BigDecimal change, BigDecimal before);
 

@@ -2,6 +2,7 @@ package run.bequick.dreamccc.pats.service.data;
 
 import org.springframework.validation.annotation.Validated;
 import run.bequick.dreamccc.pats.domain.CarInfo;
+import run.bequick.dreamccc.pats.domain.Customer;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,4 +19,5 @@ public interface CarInfoDService {
 
     CarInfo saveCarInfo(@Validated CarInfo entity);
 
+    CarInfo bindCustomer(CarInfo carInfo, Customer customer);
 }

@@ -13,6 +13,8 @@ public interface ParkingCardDService {
 
     ParkingCard save(ParkingCard parkingCard);
 
+    List<ParkingCard> listAll();
+
     Optional<ParkingCard> findById(Long id);
 
     Optional<ParkingCard> findByCardNo(String cardNo);

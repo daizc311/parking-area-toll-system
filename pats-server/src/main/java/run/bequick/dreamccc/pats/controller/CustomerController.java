@@ -28,7 +28,6 @@ import run.bequick.dreamccc.pats.security.SecurityConstant;
 import run.bequick.dreamccc.pats.security.SecurityService;
 import run.bequick.dreamccc.pats.security.UserType;
 import run.bequick.dreamccc.pats.service.data.CustomerDService;
-import run.bequick.dreamccc.pats.service.data.ParkingCardDService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
@@ -44,7 +43,6 @@ public class CustomerController {
 
     private final RedisTemplate<String, ThreeFactor> verifyThreeFactorTemplate;
     private final CustomerDService customerDService;
-    private final ParkingCardDService parkingCardDService;
     private final SecurityService securityService;
 
     @Operation(summary = "客户注册三要素验证", tags = {"Customer"})
@@ -116,7 +114,7 @@ public class CustomerController {
 
     @Operation(summary = "客户绑定车辆", tags = {"Customer", "CarInfo"})
     @PostMapping("/bindCarInfo")
-    public DrResponse<Customer> bindCarInfo(@RequestBody @Validated WhateverStringParam numberPlateParam) {
+    public DrResponse<Customer> bindCarInfo(@RequestBody WhateverStringParam numberPlateParam) {
 
         final Customer customer = securityService.getCurrentCustomer()
                 .orElseThrow(() -> new BusinessException(StrFormatter.format("未找到当前登录用户")));
@@ -133,7 +131,7 @@ public class CustomerController {
         return DrResponse.data(user);
     }
 
-    @Operation(summary = "获取当前登录客户", tags = {"Customer", "Login"})
+    @Operation(summary = "[管理端]添加用户", tags = {"Customer", "Login"})
     @PostMapping("/addCustomer")
     public DrResponse<Customer> addCustomer(Customer customer) {
 

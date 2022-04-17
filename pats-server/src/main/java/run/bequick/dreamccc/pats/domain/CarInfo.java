@@ -1,5 +1,6 @@
 package run.bequick.dreamccc.pats.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,8 @@ public class CarInfo extends AbstractAuditable<AppUser, Long> {
 
     @Schema(description = "与车辆关联的客户信息")
     @ManyToOne
-    @JoinColumn(name = "customer_id",referencedColumnName = "id")
+    @JsonIgnoreProperties(value = "carInfos")
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
     @Schema(description = "车牌号")

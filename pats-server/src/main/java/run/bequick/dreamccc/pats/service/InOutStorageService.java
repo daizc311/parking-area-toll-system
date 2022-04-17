@@ -1,6 +1,5 @@
 package run.bequick.dreamccc.pats.service;
 
-import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.domain.CarInfo;
 import run.bequick.dreamccc.pats.domain.CarParkingStatus;
 import run.bequick.dreamccc.pats.domain.ParkingCard;
@@ -17,7 +16,7 @@ public interface InOutStorageService {
 
     BigDecimal calcAmountToPaid(Long carId);
 
-    @Transactional
+
     boolean feePayment(CarParkingStatus carParkingStatus, BigDecimal payAmount, ParkingCard parkingCard);
 
     boolean outStorage(CarInfo carInfo);

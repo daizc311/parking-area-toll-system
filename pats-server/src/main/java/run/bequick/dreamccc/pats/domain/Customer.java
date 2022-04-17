@@ -1,6 +1,7 @@
 package run.bequick.dreamccc.pats.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,10 +51,12 @@ public class Customer extends AbstractAuditable<AppUser, Long> {
     private String salt;
 
 
+    @JsonIgnoreProperties(value = "customer")
     @Schema(description = "与用户关联的停车卡信息")
     @OneToMany(targetEntity = ParkingCard.class)
     private List<ParkingCard> parkingCards;
 
+    @JsonIgnoreProperties(value = "customer")
     @Schema(description = "与用户关联的车辆信息")
     @OneToMany(targetEntity = CarInfo.class)
     private List<CarInfo> carInfos;

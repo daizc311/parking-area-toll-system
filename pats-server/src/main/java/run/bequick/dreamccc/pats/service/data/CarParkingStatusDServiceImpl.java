@@ -4,7 +4,6 @@ import cn.hutool.core.text.StrFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarInfo;
@@ -23,7 +22,7 @@ public class CarParkingStatusDServiceImpl implements CarParkingStatusDService {
     private final CarParkingLogDODService carParkingLogDODService;
 
     @Override
-    @Transactional
+
     @ServiceLog(value = "新增在库记录 - {pos} - carId:{},date:{}", paramEl = {"#root[0].id", "#root[1]"})
     public void addStorageStatus(CarInfo carInfo, Date inStorageTime) {
         // 添加在库记录
@@ -36,7 +35,7 @@ public class CarParkingStatusDServiceImpl implements CarParkingStatusDService {
     }
 
     @Override
-    @Transactional
+
     @ServiceLog(value = "删除在库记录 - {pos} - carId:{},date:{}", paramEl = {"#root[0].id", "#root[1]"})
     public void deleteStorageStatus(CarInfo carInfo, Date outStorageTime) {
         // 查询在库记录

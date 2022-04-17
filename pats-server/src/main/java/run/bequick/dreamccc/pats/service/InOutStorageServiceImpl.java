@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import run.bequick.dreamccc.pats.common.BusinessException;
 import run.bequick.dreamccc.pats.common.ServiceLog;
 import run.bequick.dreamccc.pats.domain.CarInfo;
@@ -37,7 +36,7 @@ public class InOutStorageServiceImpl implements InOutStorageService {
     private final StringRedisTemplate stringRedisTemplate;
 
     @Override
-    @Transactional
+
     @ServiceLog(value = "车辆入库 - {pos} - numberPlate:{}", paramEl = {"#root[0].carInfo.numberPlate"})
     public void inStorage(ApiInStorageParam param) {
 
@@ -58,7 +57,7 @@ public class InOutStorageServiceImpl implements InOutStorageService {
     }
 
     @Override
-    @Transactional
+
     public boolean feePayment(ApiFeePaymentParam param) {
 
         final var parkingCard = parkingCardDService.findById(param.getParkingCardId())
@@ -104,7 +103,7 @@ public class InOutStorageServiceImpl implements InOutStorageService {
 
 
     @Override
-    @Transactional
+
     public boolean feePayment(CarParkingStatus carParkingStatus, BigDecimal payAmount, ParkingCard parkingCard) {
 
         final var carInfo = carParkingStatus.getCarInfo();

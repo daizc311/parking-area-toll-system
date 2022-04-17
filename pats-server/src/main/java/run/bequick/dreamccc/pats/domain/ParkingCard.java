@@ -1,5 +1,6 @@
 package run.bequick.dreamccc.pats.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,6 +45,7 @@ public class ParkingCard extends AbstractAuditable<AppUser,Long> {
     @NotNull
     private BigDecimal amount;
 
+    @JsonIgnoreProperties(value = "parkingCards")
     @Schema(description = "与停车卡关联的客户信息")
     @ManyToOne
     @JoinColumn(name = "customer_id",referencedColumnName = "id")

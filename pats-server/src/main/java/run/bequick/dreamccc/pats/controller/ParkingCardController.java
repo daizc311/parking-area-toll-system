@@ -23,6 +23,7 @@ import run.bequick.dreamccc.pats.service.data.CustomerDService;
 import run.bequick.dreamccc.pats.service.data.ParkingCardDService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,6 +32,13 @@ import java.math.BigDecimal;
 public class ParkingCardController {
     private final ParkingCardDService parkingCardDService;
     private final CustomerDService customerDService;
+
+    @Operation(summary = "查询所有停车卡", tags = {"ParkingCard"})
+    @PostMapping("/listAll")
+    public DrResponse<List<ParkingCard>> listAll() {
+
+        return DrResponse.data(parkingCardDService.listAll());
+    }
 
     @Operation(summary = "充值", tags = {"ParkingCard"})
     @PostMapping("/recharge")
