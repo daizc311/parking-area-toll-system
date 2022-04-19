@@ -2,6 +2,7 @@ package run.bequick.dreamccc.pats.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import run.bequick.dreamccc.pats.common.ColumnComment;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ public class AppRole {
 
     @Getter
     @Column(unique = true, nullable = false)
+    @ColumnComment("权限字符串")
     private String description;
 
     public AppRole(String id, String description) {

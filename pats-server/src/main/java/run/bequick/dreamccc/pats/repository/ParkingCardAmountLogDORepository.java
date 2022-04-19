@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface ParkingCardAmountLogDORepository extends JpaRepository<ParkingCardAmountLogDO, Long> {
 
-    List<ParkingCardAmountLogDO> findAllByChangeEventIdAndType(Long changeEventId, ParkingCardAmountLogDO.AmountChangeType type);
+    List<ParkingCardAmountLogDO> findAllByChangeEventIdAndType(String changeEventId, ParkingCardAmountLogDO.AmountChangeType type);
 }

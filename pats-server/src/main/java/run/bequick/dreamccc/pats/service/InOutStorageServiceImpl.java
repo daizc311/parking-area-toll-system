@@ -125,7 +125,7 @@ public class InOutStorageServiceImpl implements InOutStorageService {
 
         if (payOff) {
             // 15分钟内出库
-            final var outStorageToken = "outStorage/" + carInfo.getId();
+            final var outStorageToken = "outStorage/" + carInfo.getNumberPlate();
             stringRedisTemplate.opsForValue().setIfAbsent(outStorageToken, carInfo.getNumberPlate(), parkingSettingDService.getSetting().getBillingCycle(), TimeUnit.SECONDS);
             log.debug("添加出库凭证[{}]，{}{}内有效", outStorageToken, parkingSettingDService.getSetting().getBillingCycle(), TimeUnit.SECONDS);
             return true;
@@ -135,7 +135,7 @@ public class InOutStorageServiceImpl implements InOutStorageService {
 
     @Override
     public boolean outStorage(CarInfo carInfo) {
-        final var outStorageToken = stringRedisTemplate.opsForValue().getAndDelete("outStorage/" + carInfo);
+        final var outStorageToken = stringRedisTemplate.opsForValue().getAndExpire("outStorage/" + carInfo.getNumberPlate(), 5, TimeUnit.SECONDS);
 
         carParkingStatusDService.deleteStorageStatus(carInfo, new DateTime());
         return Objects.equals(carInfo.getNumberPlate(), outStorageToken);

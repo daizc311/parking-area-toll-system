@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import run.bequick.dreamccc.pats.common.ColumnComment;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -29,24 +30,31 @@ import java.math.BigDecimal;
 public class ParkingCardAmountLogDO extends AbstractAuditable<AppUser, Long> {
 
     @Schema(description = "用户ID")
+    @ColumnComment("用户ID")
     private Long userId;
 
     @Schema(description = "停车卡ID")
+    @ColumnComment("停车卡ID")
     private Long cardId;
 
     @Schema(description = "变动事件Id:充值时为外部提供的订单号,消费时为停车记录Id")
+    @ColumnComment("变动事件Id")
     private String changeEventId;
 
     @Schema(description = "变动前余额")
+    @ColumnComment("变动前余额")
     private BigDecimal beforeAmount;
 
     @Schema(description = "变动金额")
+    @ColumnComment("变动金额")
     private BigDecimal changeAmount;
 
     @Schema(description = "变动类型：充值/消费")
+    @ColumnComment("变动类型(充值/消费)")
     private AmountChangeType type;
 
     @Schema(description = "变动后余额")
+    @ColumnComment("变动后余额")
     private BigDecimal afterAmount;
 
     public enum AmountChangeType {

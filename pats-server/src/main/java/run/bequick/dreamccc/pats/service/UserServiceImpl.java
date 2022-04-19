@@ -20,6 +20,7 @@ import run.bequick.dreamccc.pats.repository.AppUserRepository;
 import run.bequick.dreamccc.pats.security.JwtUserDetail;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -106,13 +107,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             appRoleRepository.deleteAll();
             Arrays.stream(AppRoleEnum.values())
                     .map(appRoleEnum -> new AppRole(appRoleEnum.toString(), appRoleEnum.getDescription()))
-//                    .peek(role -> role.setNew())
                     .forEach(appRoleRepository::save);
         }
 
         AppUser admin = appUserRepository.findByUsername("admin");
         if (admin == null) {
-//            String adminPwd = UUID.fastUUID().toString(true);
             String adminPwd = "admin";
             admin = new AppUser();
             admin.setUsername("admin");
@@ -122,6 +121,39 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             admin = appUserRepository.save(admin);
             log.warn("admin密码已生成:{}", adminPwd);
         }
+        AppUser garageManager = appUserRepository.findByUsername("garageManager");
+        if (garageManager == null) {
+            String garageManagerPwd = "garageManager";
+            garageManager = new AppUser();
+            garageManager.setUsername("garageManager");
+            final var appRole = appRoleRepository.findById(AppRoleEnum.ROLE_GARAGE_MANAGER)
+                    .orElse(new AppRole(
+                            AppRoleEnum.GARAGE_MANAGER.toString(),
+                            AppRoleEnum.GARAGE_MANAGER.getDescription()
+                    ));
+            garageManager.setRoles(Collections.singletonList(appRole));
+            garageManager.setName("车库管理员");
+            garageManager.setPassword(passwordEncoder.encode(garageManagerPwd));
+            garageManager = appUserRepository.save(garageManager);
+            log.warn("garageManager密码已生成:{}", garageManagerPwd);
+        }
+        AppUser financialManager = appUserRepository.findByUsername("financialManager");
+        if (financialManager == null) {
+            String financialManagerPwd = "financialManager";
+            financialManager = new AppUser();
+            financialManager.setUsername("financialManager");
+            final var appRole = appRoleRepository.findById(AppRoleEnum.ROLE_FINANCIAL_MANAGER)
+                    .orElse(new AppRole(
+                            AppRoleEnum.FINANCIAL_MANAGER.toString(),
+                            AppRoleEnum.FINANCIAL_MANAGER.getDescription()
+                    ));
+            financialManager.setRoles(Collections.singletonList(appRole));
+            financialManager.setName("财务经理");
+            financialManager.setPassword(passwordEncoder.encode(financialManagerPwd));
+            financialManager = appUserRepository.save(financialManager);
+            log.warn("financialManager密码已生成:{}", financialManagerPwd);
+        }
+
     }
 
     @Override

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import run.bequick.dreamccc.pats.common.ColumnComment;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,26 +29,32 @@ public class Customer extends AbstractAuditable<AppUser, Long> {
 
     @Schema(description = "[三要素之一]真实姓名")
     @Column(nullable = false)
+    @ColumnComment("[三要素之一]真实姓名")
     private String realName;
 
     @Schema(description = "[三要素之一]身份证号")
     @Column(nullable = false)
+    @ColumnComment("[三要素之一]身份证号")
     private String idNumber;
 
     @Schema(description = "[三要素之一][可用于登录]手机号")
     @Column(nullable = false)
+    @ColumnComment("[三要素之一][可用于登录]手机号")
     private String mobile;
 
     @Schema(description = "[可用于登录]登录名称")
     @Column(nullable = false)
+    @ColumnComment("[可用于登录]登录名称")
     private String loginName;
 
     @JsonIgnore
     @Column(nullable = false)
+    @ColumnComment("密码")
     private String password;
 
     @JsonIgnore
     @Column(nullable = false)
+    @ColumnComment("盐值")
     private String salt;
 
 

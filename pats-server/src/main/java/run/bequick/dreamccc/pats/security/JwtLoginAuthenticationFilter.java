@@ -43,11 +43,14 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
         String password = request.getParameter("password");
         log.info("用户[{}]尝试登录", username);
 
-        return authenticationManager.authenticate(new JwtUsernamePasswordAuthenticationToken(UserType.APP_USER,username, password));
+        return authenticationManager.authenticate(new JwtUsernamePasswordAuthenticationToken(UserType.APP_USER, username, password));
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                              HttpServletResponse response,
+                                              AuthenticationException failed)
+            throws IOException, ServletException {
 
         String username = request.getParameter("username");
         log.info("用户[{}]登录失败，cause:{}", username, failed.getMessage());
@@ -61,7 +64,11 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authentication)
+            throws IOException, ServletException {
 
         int expiresSecond = 1800;
         int refreshSecond = 3600;
@@ -80,15 +87,15 @@ public class JwtLoginAuthenticationFilter extends UsernamePasswordAuthentication
                 .withExpiresAt(accessTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("userType", UserType.APP_USER.toString())
-                .withClaim("userId",userDetail.getUserId())
+                .withClaim("userId", userDetail.getUserId())
                 .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
         String refreshToken = JWT.create()
                 .withSubject(userDetail.getUsername())
                 .withExpiresAt(refreshTokenTime.getTime())
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("userType",  UserType.APP_USER.toString())
-                .withClaim("userId",userDetail.getUserId())
+                .withClaim("userType", UserType.APP_USER.toString())
+                .withClaim("userId", userDetail.getUserId())
                 .withClaim("roles", userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 

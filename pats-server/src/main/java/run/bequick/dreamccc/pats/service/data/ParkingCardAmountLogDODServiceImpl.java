@@ -37,6 +37,6 @@ public class ParkingCardAmountLogDODServiceImpl implements ParkingCardAmountLogD
 
     @Override
     public List<ParkingCardAmountLogDO> listByCarPackingStatusId(Long id) {
-        return repository.findAllByChangeEventIdAndType(id, ParkingCardAmountLogDO.AmountChangeType.CONSUME);
+        return repository.findAllByChangeEventIdAndType(id.toString(), ParkingCardAmountLogDO.AmountChangeType.CONSUME);
     }
 }

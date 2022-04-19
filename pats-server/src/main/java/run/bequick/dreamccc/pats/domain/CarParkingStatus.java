@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.AbstractAuditable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import run.bequick.dreamccc.pats.common.ColumnComment;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -25,9 +26,11 @@ public class CarParkingStatus extends AbstractAuditable<AppUser, Long> {
 
     @OneToOne
     @JoinColumn(name = "car_info_id", referencedColumnName = "id", unique = true)
+    @ColumnComment("车辆信息Id")
     @Schema(description = "车辆信息")
     private CarInfo carInfo;
 
     @Schema(description = "车辆入库时间")
+    @ColumnComment("车辆入库时间")
     private Date inStorageDate;
 }
